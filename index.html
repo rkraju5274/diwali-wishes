@@ -10,7 +10,7 @@
   <meta property="og:description" content="रोशनी का यह पावन पर्व आपके जीवन में सुख, शांति और समृद्धि लेकर आए। देखिए आपके लिए खास संदेश!">
   <meta property="og:image" content="https://images.unsplash.com/photo-1514565131-fce0801e5785?q=80&w=800&auto=format&fit=crop">
 
-  <!-- Fonts & Icons -->
+  <!-- Google Fonts & Font Awesome -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700;800&family=Rozha+One&family=Yatra+One&display=swap" rel="stylesheet">
@@ -24,7 +24,7 @@
       --gold-light: #fff2a3;
       --gold-dark: #b8860b;
       --accent-red: #c9182b;
-      --card-bg: rgba(10, 20, 44, 0.88);
+      --card-bg: rgba(10, 20, 44, 0.92);
     }
 
     * {
@@ -44,23 +44,23 @@
     }
 
     /* =========================================
-       1. ROYAL CURTAIN (PARDA) OPENING EFFECT
+       1. ROYAL CURTAIN (AUTO-OPEN CSS ANIMATION)
        ========================================= */
     #curtain-container {
       position: fixed;
       inset: 0;
-      z-index: 9999;
+      z-index: 99999;
       pointer-events: none;
       display: flex;
+      animation: hideCurtainBox 0.1s linear 2.5s forwards;
     }
 
     .curtain {
       width: 50%;
       height: 100%;
-      background: radial-gradient(circle at 50% 50%, #900c1e, #4a000b 85%);
-      box-shadow: inset 0 0 50px rgba(0,0,0,0.8);
+      background: radial-gradient(circle at 50% 50%, #990a1e, #450009 85%);
+      box-shadow: inset 0 0 60px rgba(0,0,0,0.85);
       position: relative;
-      transition: transform 1.8s cubic-bezier(0.77, 0, 0.175, 1);
     }
 
     .curtain::before {
@@ -69,25 +69,17 @@
       top: 0;
       bottom: 0;
       width: 100%;
-      background: repeating-linear-gradient(90deg, rgba(0,0,0,0.2) 0px, rgba(255,215,0,0.1) 20px, rgba(0,0,0,0.3) 40px);
+      background: repeating-linear-gradient(90deg, rgba(0,0,0,0.3) 0px, rgba(255,215,0,0.12) 20px, rgba(0,0,0,0.4) 40px);
     }
 
     .curtain-left {
       border-right: 4px solid #ffd700;
-      transform: translateX(0);
+      animation: openCurtainLeft 2s cubic-bezier(0.77, 0, 0.175, 1) 0.5s forwards;
     }
 
     .curtain-right {
       border-left: 4px solid #ffd700;
-      transform: translateX(0);
-    }
-
-    .curtains-open .curtain-left {
-      transform: translateX(-100%);
-    }
-
-    .curtains-open .curtain-right {
-      transform: translateX(100%);
+      animation: openCurtainRight 2s cubic-bezier(0.77, 0, 0.175, 1) 0.5s forwards;
     }
 
     .curtain-logo {
@@ -97,20 +89,34 @@
       transform: translate(-50%, -50%);
       color: var(--gold-primary);
       font-family: 'Yatra One', cursive;
-      font-size: 26px;
+      font-size: 24px;
       text-align: center;
-      z-index: 10000;
-      transition: opacity 0.8s ease;
-      background: rgba(10, 20, 44, 0.9);
-      padding: 20px 30px;
+      z-index: 100000;
+      background: rgba(10, 20, 44, 0.95);
+      padding: 18px 28px;
       border-radius: 20px;
       border: 2px solid var(--gold-primary);
-      box-shadow: 0 0 30px rgba(246, 195, 67, 0.5);
+      box-shadow: 0 0 35px rgba(246, 195, 67, 0.7);
+      animation: fadeOutBadge 0.6s ease-in 1.4s forwards;
     }
 
-    .curtains-open .curtain-logo {
-      opacity: 0;
-      pointer-events: none;
+    @keyframes openCurtainLeft {
+      0% { transform: translateX(0); }
+      100% { transform: translateX(-100%); }
+    }
+
+    @keyframes openCurtainRight {
+      0% { transform: translateX(0); }
+      100% { transform: translateX(100%); }
+    }
+
+    @keyframes fadeOutBadge {
+      0% { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+      100% { opacity: 0; transform: translate(-50%, -50%) scale(0.7); visibility: hidden; }
+    }
+
+    @keyframes hideCurtainBox {
+      to { display: none; }
     }
 
     /* Background Canvas */
@@ -124,17 +130,17 @@
       pointer-events: none;
     }
 
-    /* Toran Banner */
+    /* Festive Top Banner */
     .festive-toran {
       width: 100%;
       height: 18px;
       background: repeating-linear-gradient(45deg, #c9182b, #c9182b 15px, #f6c343 15px, #f6c343 30px, #ff7b00 30px, #ff7b00 45px);
-      box-shadow: 0 3px 10px rgba(0,0,0,0.5);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.6);
       position: relative;
       z-index: 10;
     }
 
-    /* Hanging Diyas */
+    /* Hanging Animated Diyas */
     .diya-hangers {
       display: flex;
       justify-content: space-around;
@@ -164,13 +170,13 @@
 
     .hanger-diya {
       font-size: 28px;
-      filter: drop-shadow(0 0 10px #ff9900);
+      filter: drop-shadow(0 0 12px #ff9900);
       line-height: 1;
     }
 
     @keyframes swing {
-      0% { transform: rotate(-5deg); }
-      100% { transform: rotate(5deg); }
+      0% { transform: rotate(-6deg); }
+      100% { transform: rotate(6deg); }
     }
 
     .container {
@@ -207,16 +213,16 @@
     }
 
     /* =========================================
-       2. ROTATING ANIMATED BORDER CARD
+       2. ROTATING DANCING BORDER CARD
        ========================================= */
     .animated-border-card {
       position: relative;
       border-radius: 26px;
-      padding: 3px;
+      padding: 3.5px;
       background: linear-gradient(60deg, #f79533, #f37055, #ef4e7b, #a166ab, #5073b8, #1098ad, #07b39b, #6fba82);
       background-size: 300% 300%;
       animation: rotateBorder 4s ease infinite;
-      box-shadow: 0 15px 40px rgba(0,0,0,0.6);
+      box-shadow: 0 15px 40px rgba(0,0,0,0.7);
       margin-bottom: 25px;
     }
 
@@ -235,7 +241,7 @@
     }
 
     /* =========================================
-       3. BIG & ANIMATED PHOTO CONTAINER
+       3. BIG & ANIMATED USER PHOTO
        ========================================= */
     .big-photo-wrapper {
       position: relative;
@@ -247,7 +253,7 @@
       background: linear-gradient(135deg, #ffe066, #ff7700, #ff0055, #ffd700);
       background-size: 200% 200%;
       animation: photoGlow 3s ease infinite, photoFloat 4s ease-in-out infinite alternate;
-      box-shadow: 0 0 30px rgba(246, 195, 67, 0.7);
+      box-shadow: 0 0 32px rgba(246, 195, 67, 0.75);
     }
 
     @keyframes photoGlow {
@@ -276,7 +282,7 @@
       color: #fff;
       font-size: 12px;
       font-weight: 700;
-      padding: 4px 14px;
+      padding: 4px 16px;
       border-radius: 20px;
       letter-spacing: 1px;
       text-transform: uppercase;
@@ -286,9 +292,9 @@
 
     .user-name-text {
       font-family: 'Yatra One', cursive;
-      font-size: 28px;
+      font-size: 29px;
       color: var(--gold-primary);
-      text-shadow: 0 0 10px rgba(246, 195, 67, 0.5);
+      text-shadow: 0 0 12px rgba(246, 195, 67, 0.5);
       margin-bottom: 15px;
     }
 
@@ -314,12 +320,12 @@
       gap: 6px;
       background: rgba(246, 195, 67, 0.15);
       border: 1px solid var(--gold-primary);
-      padding: 4px 12px;
+      padding: 5px 14px;
       border-radius: 15px;
-      font-size: 11px;
+      font-size: 12px;
       color: var(--gold-light);
       cursor: pointer;
-      margin-top: 8px;
+      margin-top: 10px;
     }
 
     /* =========================================
@@ -374,13 +380,13 @@
       padding: 12px 24px;
       border-radius: 25px;
       cursor: pointer;
-      margin-top: 15px;
+      margin-top: 16px;
       text-decoration: none;
       transition: all 0.3s;
     }
 
     .btn-create-own:hover {
-      background: rgba(246, 195, 67, 0.1);
+      background: rgba(246, 195, 67, 0.12);
     }
 
     /* Form Section */
@@ -399,8 +405,8 @@
 
     .input-control {
       width: 100%;
-      background: rgba(0, 0, 0, 0.4);
-      border: 1px solid rgba(246, 195, 67, 0.3);
+      background: rgba(0, 0, 0, 0.45);
+      border: 1px solid rgba(246, 195, 67, 0.35);
       border-radius: 12px;
       padding: 12px 14px;
       color: #fff;
@@ -442,8 +448,8 @@
     #cropModal {
       position: fixed;
       inset: 0;
-      background: rgba(0,0,0,0.9);
-      z-index: 10001;
+      background: rgba(0,0,0,0.92);
+      z-index: 100001;
       display: none;
       align-items: center;
       justify-content: center;
@@ -589,7 +595,7 @@
     </div>
   </div>
 
-  <!-- Scripts -->
+  <!-- External Libraries -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.13/cropper.min.js"></script>
 
@@ -603,13 +609,12 @@
     let croppedBlob = null;
     let currentWishData = null;
 
-    // 1. Royal Curtain Animation Trigger
-    window.addEventListener('load', () => {
-      setTimeout(() => {
-        document.body.classList.add('curtains-open');
-        initApp();
-      }, 700);
-    });
+    // Fast Page Initialization (Auto-start)
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', initApp);
+    } else {
+      initApp();
+    }
 
     async function initApp() {
       initFireworks();
@@ -670,7 +675,7 @@
       let name = "मेरी";
 
       if (data && data.wish_code) {
-        // IMPORTANT: /wish/:code route sends crawler to dynamic Vercel serverless preview!
+        // Sends crawler to Vercel serverless preview function:
         shareUrl = `${origin}/wish/${data.wish_code}`;
         name = data.user_name;
       }
@@ -795,6 +800,7 @@
     // Fireworks Canvas
     function initFireworks() {
       const canvas = document.getElementById('fireworks-canvas');
+      if (!canvas) return;
       const ctx = canvas.getContext('2d');
       let w = canvas.width = window.innerWidth;
       let h = canvas.height = window.innerHeight;
@@ -834,7 +840,7 @@
           const p = particles[i];
           p.x += p.vx;
           p.y += p.vy;
-          p.vy += 0.03; // gravity
+          p.vy += 0.03;
           p.alpha -= 0.015;
 
           if (p.alpha <= 0) {
