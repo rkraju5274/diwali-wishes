@@ -3,17 +3,17 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>शुभ दीपावली - विशेष शुभकामना</title>
+  <title>🪔 शुभ दीपावली - विशेष शुभकामना संदेश 🪔</title>
   
   <meta property="og:type" content="website">
-  <meta property="og:title" content="शुभ दीपावली - विशेष शुभकामना आपके लिए">
-  <meta property="og:description" content="रोशनी का यह पावन पर्व आपके जीवन में सुख, शांति और समृद्धि लाए।">
+  <meta property="og:title" content="🪔 शुभ दीपावली - विशेष शुभकामना आपके लिए 🪔">
+  <meta property="og:description" content="रोशनी का यह पावन पर्व आपके जीवन में सुख, शांति और समृद्धि लेकर आए। देखिए आपके लिए खास संदेश!">
   <meta property="og:image" content="https://images.unsplash.com/photo-1514565131-fce0801e5785?q=80&w=800&auto=format&fit=crop">
 
   <!-- Google Fonts & Font Awesome -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&family=Rozha+One&family=Yatra+One&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700;800&family=Rozha+One&family=Yatra+One&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.13/cropper.min.css">
 
@@ -22,7 +22,9 @@
       --bg-dark: #050b1a;
       --gold-primary: #f6c343;
       --gold-light: #fff2a3;
-      --card-bg: rgba(10, 20, 44, 0.95);
+      --gold-dark: #b8860b;
+      --accent-red: #c9182b;
+      --card-bg: rgba(10, 20, 44, 0.94);
     }
 
     * {
@@ -41,18 +43,87 @@
       position: relative;
     }
 
-    /* FIREWORKS CANVAS (Z-INDEX MINUS MEIN TAAKI CLICK NA RUKE) */
+    /* 1. ROYAL CURTAIN */
+    #curtain-container {
+      position: fixed;
+      inset: 0;
+      z-index: 99999;
+      pointer-events: none !important;
+      display: flex;
+    }
+
+    .curtain {
+      width: 50%;
+      height: 100%;
+      background: radial-gradient(circle at 50% 50%, #990a1e, #450009 85%);
+      box-shadow: inset 0 0 60px rgba(0,0,0,0.85);
+      position: relative;
+      pointer-events: none !important;
+    }
+
+    .curtain::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      width: 100%;
+      background: repeating-linear-gradient(90deg, rgba(0,0,0,0.3) 0px, rgba(255,215,0,0.12) 20px, rgba(0,0,0,0.4) 40px);
+    }
+
+    .curtain-left {
+      border-right: 4px solid #ffd700;
+      animation: openCurtainLeft 1.6s cubic-bezier(0.77, 0, 0.175, 1) 0.3s forwards;
+    }
+
+    .curtain-right {
+      border-left: 4px solid #ffd700;
+      animation: openCurtainRight 1.6s cubic-bezier(0.77, 0, 0.175, 1) 0.3s forwards;
+    }
+
+    .curtain-logo {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      color: var(--gold-primary);
+      font-family: 'Yatra One', cursive;
+      font-size: 24px;
+      text-align: center;
+      z-index: 100000;
+      background: rgba(10, 20, 44, 0.96);
+      padding: 16px 26px;
+      border-radius: 20px;
+      border: 2px solid var(--gold-primary);
+      box-shadow: 0 0 35px rgba(246, 195, 67, 0.7);
+      animation: fadeOutBadge 0.4s ease-in 1.1s forwards;
+      pointer-events: none !important;
+    }
+
+    @keyframes openCurtainLeft {
+      0% { transform: translateX(0); }
+      100% { transform: translateX(-105%); }
+    }
+
+    @keyframes openCurtainRight {
+      0% { transform: translateX(0); }
+      100% { transform: translateX(105%); }
+    }
+
+    @keyframes fadeOutBadge {
+      0% { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+      100% { opacity: 0; transform: translate(-50%, -50%) scale(0.7); }
+    }
+
     #fireworks-canvas {
       position: fixed;
       top: 0;
       left: 0;
-      width: 100vw;
-      height: 100vh;
-      z-index: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 1;
       pointer-events: none;
     }
 
-    /* TOP TORAN */
     .festive-toran {
       width: 100%;
       height: 16px;
@@ -62,11 +133,10 @@
       z-index: 10;
     }
 
-    /* HANGING DIYAS */
     .diya-hangers {
       display: flex;
       justify-content: space-around;
-      max-width: 450px;
+      max-width: 500px;
       margin: 0 auto;
       padding-top: 5px;
       position: relative;
@@ -83,50 +153,65 @@
     }
 
     .diya-hanger:nth-child(2) { animation-delay: -1.2s; }
-    .hanger-thread { width: 2px; height: 30px; background: #f6c343; }
-    .hanger-diya { font-size: 26px; filter: drop-shadow(0 0 10px #ff9900); }
+    .diya-hanger:nth-child(3) { animation-delay: -2.4s; }
+
+    .hanger-thread {
+      width: 2px;
+      height: 35px;
+      background: linear-gradient(to bottom, #d4af37, #f6c343);
+    }
+
+    .hanger-diya {
+      font-size: 26px;
+      filter: drop-shadow(0 0 12px #ff9900);
+      line-height: 1;
+    }
 
     @keyframes swing {
       0% { transform: rotate(-6deg); }
       100% { transform: rotate(6deg); }
     }
 
-    /* MAIN CONTAINER */
     .container {
-      max-width: 460px;
+      max-width: 480px;
       margin: 0 auto;
-      padding: 15px;
+      padding: 12px 16px 40px;
       position: relative;
-      z-index: 50; /* Sabse upar */
+      z-index: 100;
     }
 
     .title-box {
       text-align: center;
-      margin-bottom: 20px;
+      margin: 12px 0 18px;
     }
 
     .main-title {
       font-family: 'Rozha One', serif;
       font-size: 32px;
       color: var(--gold-primary);
-      text-shadow: 0 0 15px rgba(246, 195, 67, 0.6);
+      text-shadow: 0 0 15px rgba(246, 195, 67, 0.6), 0 0 30px rgba(255, 120, 0, 0.4);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
     }
 
     .sub-title {
       font-size: 13px;
-      color: #cbd5e1;
-      margin-top: 5px;
+      color: #e2e8f0;
+      margin-top: 4px;
+      line-height: 1.5;
+      font-weight: 300;
     }
 
-    /* ROTATING BORDER CARD */
     .animated-border-card {
       position: relative;
-      border-radius: 24px;
+      border-radius: 26px;
       padding: 3.5px;
       background: linear-gradient(60deg, #f79533, #f37055, #ef4e7b, #a166ab, #5073b8, #1098ad, #07b39b, #6fba82);
       background-size: 300% 300%;
       animation: rotateBorder 4s ease infinite;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.8);
+      box-shadow: 0 15px 40px rgba(0,0,0,0.7);
       margin-bottom: 25px;
     }
 
@@ -138,25 +223,25 @@
 
     .card-inner {
       background: var(--card-bg);
-      border-radius: 21px;
-      padding: 22px 16px;
+      backdrop-filter: blur(12px);
+      border-radius: 23px;
+      padding: 22px 18px;
       text-align: center;
       position: relative;
-      z-index: 60;
+      z-index: 102;
     }
 
-    /* BIG PHOTO WRAPPER */
     .big-photo-wrapper {
       position: relative;
-      width: 200px;
-      height: 200px;
-      margin: 10px auto 16px;
+      width: 210px;
+      height: 210px;
+      margin: 10px auto 18px;
       border-radius: 50%;
-      padding: 5px;
+      padding: 6px;
       background: linear-gradient(135deg, #ffe066, #ff7700, #ff0055, #ffd700);
       background-size: 200% 200%;
       animation: photoGlow 3s ease infinite, photoFloat 4s ease-in-out infinite alternate;
-      box-shadow: 0 0 25px rgba(246, 195, 67, 0.7);
+      box-shadow: 0 0 32px rgba(246, 195, 67, 0.75);
     }
 
     @keyframes photoGlow {
@@ -166,8 +251,8 @@
     }
 
     @keyframes photoFloat {
-      0% { transform: translateY(0); }
-      100% { transform: translateY(-7px); }
+      0% { transform: translateY(0) scale(1); }
+      100% { transform: translateY(-7px) scale(1.02); }
     }
 
     .big-photo-wrapper img {
@@ -175,7 +260,7 @@
       height: 100%;
       object-fit: cover;
       border-radius: 50%;
-      border: 3px solid #fff;
+      border: 4px solid #fff;
       display: block;
     }
 
@@ -185,30 +270,33 @@
       color: #fff;
       font-size: 11px;
       font-weight: 700;
-      padding: 3px 14px;
+      padding: 4px 14px;
       border-radius: 20px;
+      letter-spacing: 1px;
       text-transform: uppercase;
-      margin-bottom: 6px;
+      box-shadow: 0 4px 12px rgba(255, 69, 0, 0.4);
+      margin-bottom: 8px;
     }
 
     .user-name-text {
       font-family: 'Yatra One', cursive;
       font-size: 28px;
       color: var(--gold-primary);
-      text-shadow: 0 0 10px rgba(246, 195, 67, 0.4);
-      margin-bottom: 10px;
+      text-shadow: 0 0 12px rgba(246, 195, 67, 0.5);
+      margin-bottom: 12px;
     }
 
     .greeting-quote-box {
       background: rgba(255, 255, 255, 0.05);
       border: 1px dashed rgba(246, 195, 67, 0.4);
-      border-radius: 12px;
+      border-radius: 14px;
       padding: 14px;
-      margin: 12px 0 16px;
+      margin: 12px 0 18px;
+      position: relative;
     }
 
     .greeting-quote-box p {
-      font-size: 14px;
+      font-size: 14.5px;
       line-height: 1.6;
       color: #fff2a3;
       font-style: italic;
@@ -220,47 +308,59 @@
       gap: 6px;
       background: rgba(246, 195, 67, 0.2);
       border: 1px solid var(--gold-primary);
-      padding: 5px 14px;
-      border-radius: 15px;
+      padding: 6px 16px;
+      border-radius: 18px;
       font-size: 12px;
+      font-weight: 600;
       color: #fff;
       cursor: pointer;
-      margin-top: 8px;
+      margin-top: 10px;
+      user-select: none;
     }
 
-    /* WHATSAPP ANIMATED BUTTON */
+    .voice-badge:active {
+      transform: scale(0.95);
+    }
+
     .btn-wa-animated {
       display: flex;
       align-items: center;
       justify-content: center;
-      gap: 10px;
+      gap: 12px;
       width: 100%;
       background: linear-gradient(135deg, #25D366, #128C7E);
       color: #fff;
-      font-size: 16px;
+      text-decoration: none;
+      font-size: 16.5px;
       font-weight: 700;
       padding: 15px;
-      border-radius: 30px;
+      border-radius: 35px;
       border: 2px solid #55efc4;
       box-shadow: 0 8px 25px rgba(37, 211, 102, 0.5);
       animation: waPulse 1.8s infinite;
       cursor: pointer;
-      margin-top: 15px;
-      position: relative;
-      z-index: 100;
+      margin-top: 14px;
+      user-select: none;
     }
 
-    .btn-wa-animated i { font-size: 22px; }
+    .btn-wa-animated i {
+      font-size: 24px;
+      animation: waShake 1s infinite alternate;
+    }
 
     @keyframes waPulse {
       0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(37, 211, 102, 0.7); }
-      70% { transform: scale(1.02); box-shadow: 0 0 0 12px rgba(37, 211, 102, 0); }
+      70% { transform: scale(1.02); box-shadow: 0 0 0 14px rgba(37, 211, 102, 0); }
       100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(37, 211, 102, 0); }
     }
 
-    /* CREATE OWN WISH BUTTON */
+    @keyframes waShake {
+      0% { transform: rotate(-8deg); }
+      100% { transform: rotate(8deg); }
+    }
+
     .btn-create-own {
-      display: flex;
+      display: inline-flex;
       align-items: center;
       justify-content: center;
       gap: 8px;
@@ -270,19 +370,23 @@
       font-size: 16px;
       font-weight: 700;
       padding: 15px;
-      border-radius: 30px;
+      border-radius: 35px;
       cursor: pointer;
-      margin-top: 15px;
+      margin-top: 14px;
+      box-shadow: 0 8px 22px rgba(255, 140, 0, 0.45);
       border: none;
-      box-shadow: 0 8px 20px rgba(255, 140, 0, 0.4);
-      position: relative;
-      z-index: 100;
+      user-select: none;
+      transition: all 0.3s;
     }
 
-    /* FORM STYLES */
+    .btn-create-own:hover {
+      filter: brightness(1.1);
+      transform: scale(1.02);
+    }
+
     .form-group {
       text-align: left;
-      margin-bottom: 15px;
+      margin-bottom: 16px;
     }
 
     .form-group label {
@@ -295,19 +399,24 @@
 
     .input-control {
       width: 100%;
-      background: rgba(0, 0, 0, 0.6);
-      border: 1px solid rgba(246, 195, 67, 0.4);
-      border-radius: 10px;
+      background: rgba(0, 0, 0, 0.5);
+      border: 1px solid rgba(246, 195, 67, 0.35);
+      border-radius: 12px;
       padding: 12px 14px;
       color: #fff;
       font-size: 14px;
       outline: none;
     }
 
+    .input-control:focus {
+      border-color: var(--gold-primary);
+      box-shadow: 0 0 10px rgba(246, 195, 67, 0.3);
+    }
+
     .file-upload-box {
-      border: 2px dashed rgba(246, 195, 67, 0.5);
-      border-radius: 14px;
-      padding: 18px;
+      border: 2px dashed rgba(246, 195, 67, 0.4);
+      border-radius: 16px;
+      padding: 20px;
       text-align: center;
       background: rgba(0,0,0,0.3);
       cursor: pointer;
@@ -321,67 +430,17 @@
       font-weight: 700;
       border: none;
       border-radius: 30px;
-      padding: 14px;
+      padding: 15px;
       cursor: pointer;
-      margin-top: 10px;
       box-shadow: 0 8px 20px rgba(255, 140, 0, 0.4);
-      position: relative;
-      z-index: 100;
+      margin-top: 10px;
     }
 
-    /* ROYAL PARDA ANIMATION (PURA HATNE WALA) */
-    #curtain-container {
-      position: fixed;
-      inset: 0;
-      z-index: 999999;
-      pointer-events: none;
-      display: flex;
-    }
-
-    .curtain {
-      width: 50%;
-      height: 100%;
-      background: radial-gradient(circle at 50% 50%, #990a1e, #450009 85%);
-      position: relative;
-    }
-
-    .curtain-left {
-      border-right: 4px solid #ffd700;
-      animation: pardaLeft 1.4s cubic-bezier(0.77, 0, 0.175, 1) 0.3s forwards;
-    }
-
-    .curtain-right {
-      border-left: 4px solid #ffd700;
-      animation: pardaRight 1.4s cubic-bezier(0.77, 0, 0.175, 1) 0.3s forwards;
-    }
-
-    .curtain-logo {
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      color: var(--gold-primary);
-      font-family: 'Yatra One', cursive;
-      font-size: 22px;
-      text-align: center;
-      z-index: 1000000;
-      background: rgba(10, 20, 44, 0.95);
-      padding: 15px 22px;
-      border-radius: 16px;
-      border: 2px solid var(--gold-primary);
-      animation: fadeBadge 0.4s ease 1s forwards;
-    }
-
-    @keyframes pardaLeft { to { transform: translateX(-105%); } }
-    @keyframes pardaRight { to { transform: translateX(105%); } }
-    @keyframes fadeBadge { to { opacity: 0; transform: translate(-50%, -50%) scale(0.6); } }
-
-    /* CROP MODAL */
     #cropModal {
       position: fixed;
       inset: 0;
-      background: rgba(0,0,0,0.95);
-      z-index: 1000005;
+      background: rgba(0,0,0,0.92);
+      z-index: 100005;
       display: none;
       align-items: center;
       justify-content: center;
@@ -390,33 +449,34 @@
 
     .crop-content {
       background: #0f172a;
-      padding: 18px;
-      border-radius: 14px;
-      max-width: 380px;
+      padding: 20px;
+      border-radius: 16px;
+      max-width: 400px;
       width: 100%;
       text-align: center;
     }
 
     .crop-img-container {
-      max-height: 260px;
-      margin-bottom: 12px;
+      max-height: 280px;
+      margin-bottom: 15px;
       overflow: hidden;
     }
   </style>
 </head>
 <body>
 
-  <!-- Parda -->
+  <!-- Royal Curtain -->
   <div id="curtain-container">
     <div class="curtain curtain-left"></div>
     <div class="curtain curtain-right"></div>
     <div class="curtain-logo">
       🪔 शुभ दीपावली 🪔<br>
-      <span style="font-size: 13px; color: #fff; font-family: 'Poppins', sans-serif;">शुभकामनाएं लोड हो रही हैं...</span>
+      <span style="font-size: 14px; color: #fff; font-family: 'Poppins', sans-serif;">आपके लिए खास शुभकामना...</span>
     </div>
   </div>
 
   <canvas id="fireworks-canvas"></canvas>
+
   <div class="festive-toran"></div>
 
   <div class="diya-hangers">
@@ -425,7 +485,7 @@
       <div class="hanger-diya">🪔</div>
     </div>
     <div class="diya-hanger">
-      <div class="hanger-thread" style="height: 42px;"></div>
+      <div class="hanger-thread" style="height: 48px;"></div>
       <div class="hanger-diya">✨</div>
     </div>
     <div class="diya-hanger">
@@ -436,14 +496,15 @@
 
   <div class="container">
     <div class="title-box">
-      <h1 class="main-title">🪔 शुभ दीपावली 🪔</h1>
+      <h1 class="main-title"><span>🪔</span> शुभ दीपावली <span>🪔</span></h1>
       <p class="sub-title">रोशनी का यह पावन पर्व आपके और आपके परिवार के जीवन में सुख, शांति और समृद्धि लाए।</p>
     </div>
 
-    <!-- 1. GREETING CARD VIEW -->
+    <!-- VIEW WISH CARD -->
     <div id="view-card-section">
       <div class="animated-border-card">
         <div class="card-inner">
+          
           <div class="big-photo-wrapper">
             <img id="card-photo" src="https://images.unsplash.com/photo-1514565131-fce0801e5785?q=80&w=800&auto=format&fit=crop" alt="Diwali Photo">
           </div>
@@ -453,44 +514,45 @@
 
           <div class="greeting-quote-box">
             <p id="card-message">"आपको और आपके पूरे परिवार को दीपावली की हार्दिक शुभकामनाएं। यह पावन पर्व आपके जीवन में खुशियां और समृद्धि लाए!"</p>
-            <div class="voice-badge" onclick="playSpeech()">
+            <div class="voice-badge" id="btn-play-voice">
               <i class="fas fa-volume-up"></i> बोलकर सुनें
             </div>
           </div>
 
           <p style="font-size: 12px; color: #cbd5e1; margin-bottom: 5px;">आपकी तरफ से सस्नेह प्यार और हार्दिक शुभकामनाएं ❤️</p>
 
-          <!-- WhatsApp Share Button (Sirf card create karne wale ko dikhega) -->
-          <div id="btn-wa-share" class="btn-wa-animated" style="display: none;" onclick="shareOnWhatsApp()">
+          <!-- WhatsApp Share Button -->
+          <div id="btn-wa-share" class="btn-wa-animated" style="display: none;">
             <i class="fab fa-whatsapp"></i> WhatsApp पर शेयर करें
           </div>
 
-          <!-- Create Wish Button (Visitor ko hamesha dikhega) -->
-          <button id="btn-open-create" class="btn-create-own" onclick="openCreateForm()">
+          <!-- Create Own Wish Button -->
+          <button id="btn-open-create" class="btn-create-own">
             🎁 आप भी अपना दिवाली विश बनाएं
           </button>
+
         </div>
       </div>
     </div>
 
-    <!-- 2. CREATE WISH FORM -->
+    <!-- CREATE WISH FORM SECTION -->
     <div id="create-card-section" style="display: none;">
       <div class="animated-border-card">
         <div class="card-inner">
           <h2 style="color: var(--gold-primary); font-family: 'Rozha One'; margin-bottom: 15px; font-size: 24px;">अपना ग्रीटिंग कार्ड बनाएं</h2>
 
           <div class="form-group">
-            <label>1. अपनी फ़ोटो चुनें</label>
-            <div class="file-upload-box" onclick="document.getElementById('photo-input').click()">
-              <i class="fas fa-camera" style="font-size: 30px; color: var(--gold-primary); margin-bottom: 6px;"></i>
+            <label>1. अपनी फ़ोटो चुनें (ऐच्छिक)</label>
+            <div class="file-upload-box" id="upload-trigger-box">
+              <i class="fas fa-camera" style="font-size: 32px; color: var(--gold-primary); margin-bottom: 8px;"></i>
               <div id="upload-hint" style="font-size: 13px; color: #cbd5e1;">फ़ोटो अपलोड करने के लिए टैप करें</div>
-              <input type="file" id="photo-input" accept="image/*" style="display: none;" onchange="handleFile(event)">
+              <input type="file" id="photo-input" accept="image/*" style="display: none;">
             </div>
           </div>
 
           <div class="form-group">
             <label>2. आपका नाम</label>
-            <input type="text" id="user-name-input" class="input-control" placeholder="उदा. Raju Kumar">
+            <input type="text" id="user-name-input" class="input-control" placeholder="उदा. Raju Kumar" required>
           </div>
 
           <div class="form-group">
@@ -498,16 +560,17 @@
             <textarea id="user-msg-input" class="input-control" rows="3">आपको और आपके पूरे परिवार को दीपावली की हार्दिक शुभकामनाएं। आपका जीवन खुशियों और समृद्धि से भर जाए!</textarea>
           </div>
 
-          <button id="btn-submit" class="btn-submit-gold" onclick="createWish()">
+          <button id="btn-generate" class="btn-submit-gold">
             ✨ दिवाली विश बनाएं
           </button>
 
-          <button class="btn-create-own" style="background:transparent; border:1px solid rgba(246,195,67,0.4); color:var(--gold-light); margin-top:10px;" onclick="cancelCreateForm()">
+          <button id="btn-cancel-create" class="btn-create-own" style="background:transparent; border:1px solid rgba(246,195,67,0.4); color:var(--gold-light); margin-top:8px;">
             रद्द करें
           </button>
         </div>
       </div>
     </div>
+
   </div>
 
   <!-- Crop Modal -->
@@ -515,9 +578,12 @@
     <div class="crop-content">
       <h3 style="color: var(--gold-primary); margin-bottom: 10px;">फ़ोटो क्रॉप करें</h3>
       <div class="crop-img-container">
-        <img id="image-to-crop" style="max-width: 100%;">
+        <img id="image-to-crop" style="max-width: 100%; display:block;">
       </div>
-      <button class="btn-submit-gold" onclick="finishCrop()">क्रॉप पूरा करें</button>
+      <div style="display: flex; gap: 10px; margin-top: 15px;">
+        <button id="btn-crop-cancel" class="btn-create-own" style="background: rgba(255,255,255,0.15); color: #fff; margin-top:0; padding:10px;">रद्द करें</button>
+        <button id="btn-crop-finish" class="btn-submit-gold" style="margin-top:0; flex: 1; padding:10px;">क्रॉप पूरा करें</button>
+      </div>
     </div>
   </div>
 
@@ -526,68 +592,182 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.13/cropper.min.js"></script>
 
   <script>
-    // Supabase
     const SUPABASE_URL = "https://uaoveseiyzftqornhgpt.supabase.co";
     const SUPABASE_ANON_KEY = "sb_publishable_CkjwInj9XCsmhkRq3sdMlQ_2Fi6gMYh";
-    const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+    let supabase = null;
+
+    try {
+      if (window.supabase) {
+        supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+      }
+    } catch (e) {
+      console.warn("Supabase Init Warning:", e);
+    }
 
     let cropper = null;
     let croppedBlob = null;
-    let currentCode = null;
-    let currentName = "शुभचिंतक";
+    let croppedDataUrl = null;
+    let activeWishCode = null;
+    let activeUserName = "शुभचिंतक";
+    let activeMessage = "आपको और आपके पूरे परिवार को दीपावली की हार्दिक शुभकामनाएं। यह पावन पर्व आपके जीवन में खुशियां और समृद्धि लाए!";
 
-    // Parda hatane ka full safe code
+    // Parda open animation
     setTimeout(() => {
-      const parda = document.getElementById('curtain-container');
-      if (parda) parda.remove();
-      playSpeech(); // Auto voice try
-    }, 1700);
+      const curtain = document.getElementById('curtain-container');
+      if (curtain) curtain.remove();
+      playSpeech();
+    }, 1800);
 
-    // Initial load
-    window.onload = function() {
+    document.addEventListener('DOMContentLoaded', () => {
+      initApp();
+      bindEvents();
+    });
+
+    function bindEvents() {
+      // Create Wish Toggle
+      document.getElementById('btn-open-create').addEventListener('click', () => {
+        document.getElementById('view-card-section').style.display = 'none';
+        document.getElementById('create-card-section').style.display = 'block';
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      });
+
+      document.getElementById('btn-cancel-create').addEventListener('click', () => {
+        document.getElementById('create-card-section').style.display = 'none';
+        document.getElementById('view-card-section').style.display = 'block';
+      });
+
+      // WhatsApp Share Trigger (100% Working Universal Link)
+      document.getElementById('btn-wa-share').addEventListener('click', () => {
+        const baseUrl = window.location.origin + window.location.pathname;
+        let shareUrl = '';
+
+        if (activeWishCode) {
+          shareUrl = `${baseUrl}?w=${encodeURIComponent(activeWishCode)}`;
+        } else {
+          shareUrl = `${baseUrl}?n=${encodeURIComponent(activeUserName)}&m=${encodeURIComponent(activeMessage)}`;
+        }
+
+        const text = `🪔 *शुभ दीपावली!* 🪔\n\n*${activeUserName}* की तरफ से आपके और आपके पूरे परिवार के लिए एक विशेष दीपावली शुभकामना संदेश भेजा गया है ❤️✨\n\n👇 नीचे दिए गए लिंक को खोलकर अपना खास ग्रीटिंग कार्ड देखें:\n${shareUrl}\n\n✨ *रोशनी का यह त्योहार आपके जीवन में अपार खुशियां और समृद्धि लेकर आए!* ✨`;
+        window.open(`https://api.whatsapp.com/send?text=${encodeURIComponent(text)}`, '_blank');
+      });
+
+      // Voice Speech Trigger
+      document.getElementById('btn-play-voice').addEventListener('click', () => {
+        playSpeech();
+      });
+
+      document.body.addEventListener('click', () => {
+        if (!window.hasSpoken) {
+          playSpeech();
+          window.hasSpoken = true;
+        }
+      }, { once: true });
+
+      // File Upload & Cropper
+      const fileInput = document.getElementById('photo-input');
+      document.getElementById('upload-trigger-box').addEventListener('click', () => {
+        fileInput.click();
+      });
+
+      fileInput.addEventListener('change', (e) => {
+        const file = e.target.files[0];
+        if (!file) return;
+
+        const reader = new FileReader();
+        reader.onload = (event) => {
+          const img = document.getElementById('image-to-crop');
+          document.getElementById('cropModal').style.display = 'flex';
+
+          if (cropper) {
+            cropper.destroy();
+            cropper = null;
+          }
+
+          img.onload = () => {
+            cropper = new Cropper(img, {
+              aspectRatio: 1,
+              viewMode: 1,
+              autoCropArea: 0.9,
+              responsive: true
+            });
+          };
+          img.src = event.target.result;
+        };
+        reader.readAsDataURL(file);
+      });
+
+      document.getElementById('btn-crop-cancel').addEventListener('click', () => {
+        document.getElementById('cropModal').style.display = 'none';
+        if (cropper) {
+          cropper.destroy();
+          cropper = null;
+        }
+        fileInput.value = '';
+      });
+
+      document.getElementById('btn-crop-finish').addEventListener('click', () => {
+        if (!cropper) return;
+        const canvas = cropper.getCroppedCanvas({ width: 450, height: 450 });
+        if (!canvas) {
+          document.getElementById('cropModal').style.display = 'none';
+          return;
+        }
+
+        croppedDataUrl = canvas.toDataURL('image/jpeg', 0.85);
+
+        canvas.toBlob((blob) => {
+          croppedBlob = blob;
+          document.getElementById('upload-hint').innerHTML = `<span style="color:#4ade80; font-weight:600;">✓ फ़ोटो चुन ली गई है!</span>`;
+          document.getElementById('cropModal').style.display = 'none';
+        }, 'image/jpeg', 0.85);
+      });
+
+      // Submit Form
+      document.getElementById('btn-generate').addEventListener('click', submitWish);
+    }
+
+    async function initApp() {
       initFireworks();
 
-      const params = new URLSearchParams(window.location.search);
-      let code = params.get('w');
-      const isCreated = params.get('created') === 'true';
+      const urlParams = new URLSearchParams(window.location.search);
+      let wishCode = urlParams.get('w');
+      const isNewlyCreated = urlParams.get('created') === 'true';
+      const paramName = urlParams.get('n');
+      const paramMsg = urlParams.get('m');
 
-      if (!code) {
-        const parts = window.location.pathname.split('/').filter(Boolean);
-        if (parts[0] === 'wish' && parts[1]) code = parts[1];
+      // 1. Direct URL Param Greeting
+      if (paramName) {
+        activeUserName = paramName;
+        document.getElementById('card-name').textContent = paramName;
+        if (paramMsg) {
+          activeMessage = paramMsg;
+          document.getElementById('card-message').textContent = `"${paramMsg}"`;
+        }
+
+        // Show local saved photo if available on current device
+        const localPhoto = localStorage.getItem('diwali_custom_photo');
+        if (localPhoto && isNewlyCreated) {
+          document.getElementById('card-photo').src = localPhoto;
+        }
+      } 
+      // 2. Supabase Wish Code
+      else if (wishCode) {
+        activeWishCode = wishCode;
+        await loadWishData(wishCode);
       }
 
-      if (code) {
-        currentCode = code;
-        fetchWish(code);
-
-        // Sirf naye card banane wale ko WhatsApp button dikhega
-        if (isCreated) {
-          document.getElementById('btn-wa-share').style.display = 'flex';
-          document.getElementById('btn-open-create').style.display = 'none';
-        } else {
-          document.getElementById('btn-wa-share').style.display = 'none';
-          document.getElementById('btn-open-create').style.display = 'flex';
-        }
+      // Share button vs Create button visibility logic
+      if (isNewlyCreated) {
+        document.getElementById('btn-wa-share').style.display = 'flex';
+        document.getElementById('btn-open-create').style.display = 'none';
       } else {
         document.getElementById('btn-wa-share').style.display = 'none';
-        document.getElementById('btn-open-create').style.display = 'flex';
+        document.getElementById('btn-open-create').style.display = 'inline-flex';
       }
-    };
-
-    // Toggle forms
-    function openCreateForm() {
-      document.getElementById('view-card-section').style.display = 'none';
-      document.getElementById('create-card-section').style.display = 'block';
-      window.scrollTo({ top: 0, behavior: 'smooth' });
     }
 
-    function cancelCreateForm() {
-      document.getElementById('create-card-section').style.display = 'none';
-      document.getElementById('view-card-section').style.display = 'block';
-    }
-
-    // Load from DB
-    async function fetchWish(code) {
+    async function loadWishData(code) {
+      if (!supabase) return;
       try {
         const { data, error } = await supabase
           .from('diwali_wishes')
@@ -597,73 +777,41 @@
 
         if (error || !data) return;
 
-        currentName = data.user_name;
+        activeUserName = data.user_name;
+        activeMessage = data.greeting_message;
         document.getElementById('card-name').textContent = data.user_name;
         document.getElementById('card-message').textContent = `"${data.greeting_message}"`;
         if (data.photo_url) {
           document.getElementById('card-photo').src = data.photo_url;
         }
-      } catch (e) {
-        console.error(e);
+      } catch (err) {
+        console.warn("Error loading from Supabase:", err);
       }
     }
 
-    // WhatsApp Share
-    function shareOnWhatsApp() {
-      const origin = window.location.origin;
-      const shareUrl = `${origin}/wish/${currentCode}`;
-      const text = `🪔 *शुभ दीपावली!* 🪔\n\n*${currentName}* की तरफ से आपके और आपके पूरे परिवार के लिए एक विशेष दीपावली शुभकामना संदेश भेजा गया है ❤️✨\n\n👇 नीचे दिए गए लिंक को खोलकर अपना खास ग्रीटिंग कार्ड देखें:\n${shareUrl}\n\n✨ *रोशनी का यह त्योहार आपके जीवन में अपार खुशियां और समृद्धि लेकर आए!* ✨`;
-      window.open(`https://api.whatsapp.com/send?text=${encodeURIComponent(text)}`, '_blank');
-    }
-
-    // Voice Speech
     function playSpeech() {
-      if (!('speechSynthesis' in window)) return;
-      window.speechSynthesis.cancel();
-      const msg = document.getElementById('card-message').textContent.replace(/"/g, '');
-      const name = document.getElementById('card-name').textContent;
-      const utterance = new SpeechSynthesisUtterance(`${name} की तरफ से शुभ दीपावली। ${msg}`);
-      utterance.lang = 'hi-IN';
-      utterance.rate = 0.95;
-      window.speechSynthesis.speak(utterance);
+      try {
+        if (!('speechSynthesis' in window)) return;
+        window.speechSynthesis.cancel();
+        const msgEl = document.getElementById('card-message');
+        const nameEl = document.getElementById('card-name');
+        const msg = msgEl ? msgEl.textContent.replace(/"/g, '') : '';
+        const name = nameEl ? nameEl.textContent : 'शुभचिंतक';
+        const textToSpeak = `${name} की तरफ से शुभ दीपावली। ${msg}`;
+
+        const utterance = new SpeechSynthesisUtterance(textToSpeak);
+        utterance.lang = 'hi-IN';
+        utterance.rate = 0.95;
+        window.speechSynthesis.speak(utterance);
+      } catch (e) {
+        console.warn("Speech synthesis error:", e);
+      }
     }
 
-    // Image & Crop
-    function handleFile(e) {
-      const file = e.target.files[0];
-      if (!file) return;
-
-      const reader = new FileReader();
-      reader.onload = function(evt) {
-        const img = document.getElementById('image-to-crop');
-        img.src = evt.target.result;
-        document.getElementById('cropModal').style.display = 'flex';
-
-        if (cropper) cropper.destroy();
-        cropper = new Cropper(img, {
-          aspectRatio: 1,
-          viewMode: 1,
-          autoCropArea: 0.9
-        });
-      };
-      reader.readAsDataURL(file);
-    }
-
-    function finishCrop() {
-      if (!cropper) return;
-      const canvas = cropper.getCroppedCanvas({ width: 500, height: 500 });
-      canvas.toBlob(function(blob) {
-        croppedBlob = blob;
-        document.getElementById('upload-hint').innerHTML = `<span style="color:#4ade80; font-weight:600;">✓ फ़ोटो चुन ली गई है!</span>`;
-        document.getElementById('cropModal').style.display = 'none';
-      }, 'image/jpeg', 0.85);
-    }
-
-    // Submit & Create Wish
-    async function createWish() {
+    async function submitWish() {
       const name = document.getElementById('user-name-input').value.trim();
       const message = document.getElementById('user-msg-input').value.trim();
-      const btn = document.getElementById('btn-submit');
+      const btn = document.getElementById('btn-generate');
 
       if (!name) {
         alert("कृपया अपना नाम लिखें!");
@@ -673,47 +821,64 @@
       btn.disabled = true;
       btn.innerHTML = `<i class="fas fa-spinner fa-spin"></i> बनाया जा रहा है...`;
 
-      try {
-        const wishCode = Math.random().toString(36).substring(2, 8);
-        let photoUrl = "https://images.unsplash.com/photo-1514565131-fce0801e5785?q=80&w=800&auto=format&fit=crop";
+      const wishCode = Math.random().toString(36).substring(2, 8);
+      const defaultPhoto = "https://images.unsplash.com/photo-1514565131-fce0801e5785?q=80&w=800&auto=format&fit=crop";
+      let photoUrl = defaultPhoto;
+      let dbSavedSuccess = false;
 
-        if (croppedBlob) {
-          const filePath = `${wishCode}_${Date.now()}.jpg`;
-          const { error: uploadError } = await supabase.storage
-            .from('diwali-photos')
-            .upload(filePath, croppedBlob, { contentType: 'image/jpeg' });
-
-          if (!uploadError) {
-            const { data: publicUrlData } = supabase.storage
+      // 1. Try to save using Supabase (if available)
+      if (supabase) {
+        try {
+          if (croppedBlob) {
+            const filePath = `${wishCode}_${Date.now()}.jpg`;
+            const { error: uploadError } = await supabase.storage
               .from('diwali-photos')
-              .getPublicUrl(filePath);
-            photoUrl = publicUrlData.publicUrl;
+              .upload(filePath, croppedBlob, { contentType: 'image/jpeg' });
+
+            if (!uploadError) {
+              const { data: publicUrlData } = supabase.storage
+                .from('diwali-photos')
+                .getPublicUrl(filePath);
+              photoUrl = publicUrlData.publicUrl;
+            }
           }
+
+          const { error: dbError } = await supabase
+            .from('diwali_wishes')
+            .insert([{
+              wish_code: wishCode,
+              user_name: name,
+              greeting_message: message,
+              photo_url: photoUrl
+            }]);
+
+          if (!dbError) {
+            dbSavedSuccess = true;
+          }
+        } catch (dbErr) {
+          console.warn("Supabase Save Warning:", dbErr);
         }
+      }
 
-        const { error: dbError } = await supabase
-          .from('diwali_wishes')
-          .insert([{
-            wish_code: wishCode,
-            user_name: name,
-            greeting_message: message,
-            photo_url: photoUrl
-          }]);
+      // Save user photo locally for preview
+      if (croppedDataUrl) {
+        try {
+          localStorage.setItem('diwali_custom_photo', croppedDataUrl);
+        } catch(e) {}
+      }
 
-        if (dbError) throw dbError;
+      // 2. Safe Redirect
+      const currentPath = window.location.pathname;
 
-        // Redirect naye wish par (created=true lagakar WhatsApp button dikhane ke liye)
-        window.location.href = `/?w=${wishCode}&created=true`;
-
-      } catch (err) {
-        console.error(err);
-        alert("कार्ड बनाने में त्रुटि हुई! कृपया पुनः प्रयास करें।");
-        btn.disabled = false;
-        btn.innerHTML = `✨ दिवाली विश बनाएं`;
+      if (dbSavedSuccess) {
+        window.location.href = `${currentPath}?w=${encodeURIComponent(wishCode)}&created=true`;
+      } else {
+        // Zero-Fail Fallback (अगर Supabase सेट न हो तब भी 100% चलेगा)
+        window.location.href = `${currentPath}?n=${encodeURIComponent(name)}&m=${encodeURIComponent(message)}&created=true`;
       }
     }
 
-    // Fireworks (Fatake)
+    // Fireworks
     function initFireworks() {
       const canvas = document.getElementById('fireworks-canvas');
       if (!canvas) return;
@@ -737,7 +902,7 @@
 
         for (let i = 0; i < count; i++) {
           const angle = Math.random() * Math.PI * 2;
-          const speed = Math.random() * 3.2 + 1;
+          const speed = Math.random() * 3.5 + 1.2;
           particles.push({
             x, y,
             vx: Math.cos(angle) * speed,
@@ -749,7 +914,7 @@
       }
 
       createFirework();
-      setInterval(createFirework, 1200);
+      setInterval(createFirework, 1100);
 
       function loop() {
         ctx.clearRect(0, 0, w, h);
