@@ -88,7 +88,7 @@
       100% { transform: rotate(5deg); }
     }
 
-    /* MAIN APP CONTAINER */
+    /* MAIN CONTAINER */
     .container {
       max-width: 450px;
       margin: 0 auto;
@@ -115,7 +115,7 @@
       margin-top: 4px;
     }
 
-    /* ROTATING CARD */
+    /* ROTATING BORDER CARD */
     .animated-border-card {
       position: relative;
       border-radius: 24px;
@@ -141,18 +141,20 @@
       position: relative;
     }
 
-    /* BIG PHOTO */
-    .big-photo-wrapper {
+    /* =========================================
+       1. CHARKHOT / PASSPORT SIZE PHOTO FRAME
+       ========================================= */
+    .passport-photo-wrapper {
       position: relative;
-      width: 200px;
-      height: 200px;
-      margin: 10px auto 16px;
-      border-radius: 50%;
-      padding: 5px;
+      width: 190px;
+      height: 245px; /* 3:4 Passport Aspect Ratio */
+      margin: 10px auto 18px;
+      border-radius: 18px;
+      padding: 6px;
       background: linear-gradient(135deg, #ffe066, #ff7700, #ff0055, #ffd700);
       background-size: 200% 200%;
       animation: photoGlow 3s ease infinite, photoFloat 4s ease-in-out infinite alternate;
-      box-shadow: 0 0 25px rgba(246, 195, 67, 0.7);
+      box-shadow: 0 0 28px rgba(246, 195, 67, 0.75);
     }
 
     @keyframes photoGlow {
@@ -166,11 +168,11 @@
       100% { transform: translateY(-7px); }
     }
 
-    .big-photo-wrapper img {
+    .passport-photo-wrapper img {
       width: 100%;
       height: 100%;
       object-fit: cover;
-      border-radius: 50%;
+      border-radius: 14px;
       border: 3px solid #fff;
       display: block;
     }
@@ -224,7 +226,7 @@
       margin-top: 8px;
     }
 
-    /* BUTTONS */
+    /* WHATSAPP SHARE BUTTON */
     .btn-wa-animated {
       display: flex;
       align-items: center;
@@ -250,22 +252,49 @@
       100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(37, 211, 102, 0); }
     }
 
-    .btn-create-own {
+    /* =========================================
+       2. ANIMATED "CREATE OWN WISH" BUTTON
+       ========================================= */
+    .btn-create-own-animated {
       display: flex;
       align-items: center;
       justify-content: center;
-      gap: 8px;
+      gap: 10px;
       width: 100%;
-      background: linear-gradient(135deg, #ffd700, #ff8c00);
+      background: linear-gradient(135deg, #ffd700, #ff8c00, #ff3b00);
+      background-size: 200% 200%;
       color: #1a0800;
-      font-size: 16px;
-      font-weight: 700;
-      padding: 15px;
-      border-radius: 30px;
+      font-size: 16.5px;
+      font-weight: 800;
+      padding: 16px;
+      border-radius: 35px;
       cursor: pointer;
       margin-top: 15px;
-      border: none;
-      box-shadow: 0 8px 20px rgba(255, 140, 0, 0.4);
+      border: 2px solid #fff2a3;
+      box-shadow: 0 8px 25px rgba(255, 140, 0, 0.6);
+      animation: createBtnPulse 1.8s infinite, goldFlow 3s ease infinite;
+    }
+
+    .btn-create-own-animated i {
+      font-size: 20px;
+      animation: giftShake 1.2s ease-in-out infinite alternate;
+    }
+
+    @keyframes goldFlow {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    @keyframes createBtnPulse {
+      0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(255, 215, 0, 0.75); }
+      70% { transform: scale(1.03); box-shadow: 0 0 0 14px rgba(255, 215, 0, 0); }
+      100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(255, 215, 0, 0); }
+    }
+
+    @keyframes giftShake {
+      0% { transform: rotate(-12deg) scale(1); }
+      100% { transform: rotate(12deg) scale(1.15); }
     }
 
     /* FORM STYLES */
@@ -402,7 +431,9 @@
     <div id="view-card-section">
       <div class="animated-border-card">
         <div class="card-inner">
-          <div class="big-photo-wrapper">
+          
+          <!-- Charkhot (Passport Size) Photo -->
+          <div class="passport-photo-wrapper">
             <img id="card-photo" src="https://images.unsplash.com/photo-1514565131-fce0801e5785?q=80&w=800&auto=format&fit=crop" alt="Diwali Photo">
           </div>
 
@@ -423,9 +454,9 @@
             <i class="fab fa-whatsapp"></i> WhatsApp पर शेयर करें
           </button>
 
-          <!-- Create Own Wish Button -->
-          <button id="btn-open-create" class="btn-create-own" onclick="openCreateForm()">
-            🎁 आप भी अपना दिवाली विश बनाएं
+          <!-- Animated Create Own Wish Button -->
+          <button id="btn-open-create" class="btn-create-own-animated" onclick="openCreateForm()">
+            <i class="fas fa-gift"></i> आप भी अपना दिवाली विश बनाएं
           </button>
         </div>
       </div>
@@ -438,7 +469,7 @@
           <h2 style="color: var(--gold-primary); font-family: 'Rozha One'; margin-bottom: 15px; font-size: 22px;">अपना ग्रीटिंग कार्ड बनाएं</h2>
 
           <div class="form-group">
-            <label>1. अपनी फ़ोटो चुनें</label>
+            <label>1. अपनी पासपोर्ट साइज़ फ़ोटो चुनें</label>
             <div class="file-upload-box" onclick="document.getElementById('photo-input').click()">
               <i class="fas fa-camera" style="font-size: 28px; color: var(--gold-primary); margin-bottom: 6px;"></i>
               <div id="upload-hint" style="font-size: 13px; color: #cbd5e1;">फ़ोटो अपलोड करने के लिए टैप करें</div>
@@ -460,7 +491,7 @@
             ✨ दिवाली विश बनाएं
           </button>
 
-          <button class="btn-create-own" style="background:transparent; border:1px solid rgba(246,195,67,0.4); color:var(--gold-light); margin-top:10px;" onclick="cancelCreateForm()">
+          <button class="btn-create-own-animated" style="background:transparent; border:1px solid rgba(246,195,67,0.4); color:var(--gold-light); margin-top:10px; animation:none; box-shadow:none;" onclick="cancelCreateForm()">
             रद्द करें
           </button>
         </div>
@@ -476,7 +507,7 @@
     let currentCode = null;
     let currentName = "शुभचिंतक";
 
-    // Parda complete remove taaki kisi button par asar na ho
+    // Parda complete remove
     setTimeout(() => {
       const p = document.getElementById('curtain-container');
       if (p) p.remove();
@@ -524,7 +555,6 @@
       document.getElementById('view-card-section').style.display = 'block';
     }
 
-    // Direct REST API (Zero external script failures)
     async function fetchWishDirect(code) {
       try {
         const res = await fetch(`${SUPABASE_URL}/rest/v1/diwali_wishes?wish_code=eq.${encodeURIComponent(code)}&select=*`, {
@@ -548,7 +578,7 @@
       }
     }
 
-    // Native Image Compression & Circular Fit (No Cropper library crash)
+    // Passport Ratio (3:4) Canvas Crop & Compression
     function handleImageFile(e) {
       const file = e.target.files[0];
       if (!file) return;
@@ -558,19 +588,33 @@
         const img = new Image();
         img.onload = function() {
           const canvas = document.createElement('canvas');
-          const size = Math.min(img.width, img.height);
-          canvas.width = 500;
-          canvas.height = 500;
+          // Standard 3:4 passport resolution (450 x 600)
+          canvas.width = 450;
+          canvas.height = 600;
           const ctx = canvas.getContext('2d');
 
-          // Center crop to square
-          const startX = (img.width - size) / 2;
-          const startY = (img.height - size) / 2;
-          ctx.drawImage(img, startX, startY, size, size, 0, 0, 500, 500);
+          const targetRatio = 450 / 600;
+          const imgRatio = img.width / img.height;
+
+          let sWidth, sHeight, sx, sy;
+
+          if (imgRatio > targetRatio) {
+            sHeight = img.height;
+            sWidth = img.height * targetRatio;
+            sx = (img.width - sWidth) / 2;
+            sy = 0;
+          } else {
+            sWidth = img.width;
+            sHeight = img.width / targetRatio;
+            sx = 0;
+            sy = (img.height - sHeight) / 2;
+          }
+
+          ctx.drawImage(img, sx, sy, sWidth, sHeight, 0, 0, 450, 600);
 
           canvas.toBlob((blob) => {
             compressedImageBlob = blob;
-            document.getElementById('upload-hint').innerHTML = `<span style="color:#4ade80; font-weight:600;">✓ फ़ोटो चुन ली गई है!</span>`;
+            document.getElementById('upload-hint').innerHTML = `<span style="color:#4ade80; font-weight:600;">✓ पासपोर्ट साइज़ फ़ोटो चुन ली गई!</span>`;
           }, 'image/jpeg', 0.85);
         };
         img.src = evt.target.result;
@@ -578,7 +622,6 @@
       reader.readAsDataURL(file);
     }
 
-    // Create Wish (Direct Native Fetch)
     async function createWish() {
       const name = document.getElementById('user-name-input').value.trim();
       const message = document.getElementById('user-msg-input').value.trim();
@@ -596,7 +639,6 @@
         const wishCode = Math.random().toString(36).substring(2, 8);
         let photoUrl = "https://images.unsplash.com/photo-1514565131-fce0801e5785?q=80&w=800&auto=format&fit=crop";
 
-        // Upload photo via Storage REST API
         if (compressedImageBlob) {
           const fileName = `${wishCode}_${Date.now()}.jpg`;
           const uploadRes = await fetch(`${SUPABASE_URL}/storage/v1/object/diwali-photos/${fileName}`, {
@@ -614,7 +656,6 @@
           }
         }
 
-        // Insert wish via Database REST API
         const insertRes = await fetch(`${SUPABASE_URL}/rest/v1/diwali_wishes`, {
           method: 'POST',
           headers: {
@@ -635,7 +676,6 @@
           throw new Error("Failed to save wish");
         }
 
-        // Direct reload to user wish with created flag
         window.location.href = `/?w=${wishCode}&created=true`;
 
       } catch (err) {
@@ -664,7 +704,6 @@
       window.speechSynthesis.speak(utterance);
     }
 
-    // Background Fireworks
     function initFireworks() {
       const canvas = document.getElementById('fireworks-canvas');
       if (!canvas) return;
