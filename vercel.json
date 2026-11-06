@@ -1,0 +1,12 @@
+{
+  "rewrites": [
+    {
+      "source": "/wish/:code",
+      "destination": "/api/wish-preview?code=:code"
+    },
+    {
+      "source": "/(.*)",
+      "destination": "/index.html"
+    }
+  ]
+}
