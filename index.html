@@ -1,1 +1,1201 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>🪔 शुभ दीपावली - अपनी व्यक्तिगत शुभकामना बनाएं</title>
+  
+  <!-- Primary Open Graph / Facebook Fallback -->
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="🪔 शुभ दीपावली - विशेष शुभकामना आपके लिए">
+  <meta property="og:description" content="रोशनी का यह त्योहार आपके जीवन में खुशियां और समृद्धि लेकर आए। देखिए आपके लिए खास दीवाली संदेश!">
+  <meta property="og:image" content="https://images.unsplash.com/photo-1605629921711-2f6b00c6bbf4?auto=format&fit=crop&w=1200&q=80">
+  <meta name="twitter:card" content="summary_large_image">
 
+  <!-- Google Fonts & Font Awesome Icons -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Rozha+One&family=Yatra+One&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  
+  <!-- Cropper.js for Circular Photo Cropping -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.13/cropper.min.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.13/cropper.min.js"></script>
+  
+  <!-- Canvas Confetti & Supabase JS -->
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+  <style>
+    :root {
+      --bg-dark: #050b1a;
+      --bg-card: #091329;
+      --gold-primary: #f5b335;
+      --gold-light: #fed876;
+      --gold-glow: rgba(245, 179, 53, 0.45);
+      --text-light: #fef8eb;
+      --text-muted: #d0c7b3;
+      --radius-lg: 24px;
+      --radius-md: 14px;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Poppins', sans-serif;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    body {
+      background-color: var(--bg-dark);
+      color: var(--text-light);
+      min-height: 100vh;
+      overflow-x: hidden;
+      position: relative;
+      background: radial-gradient(circle at 50% 20%, #152244 0%, #081125 55%, #030711 100%);
+    }
+
+    /* Festive Toran Top Border */
+    .festive-toran {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 24px;
+      background: repeating-linear-gradient(45deg, #d97706, #d97706 15px, #b91c1c 15px, #b91c1c 30px);
+      box-shadow: 0 4px 15px rgba(245, 179, 53, 0.4);
+      z-index: 99;
+      opacity: 0.95;
+    }
+
+    /* Hanging Lanterns */
+    .hanging-kandil {
+      position: absolute;
+      top: 24px;
+      z-index: 40;
+      pointer-events: none;
+      transform-origin: top center;
+      animation: swingLantern 4.5s ease-in-out infinite alternate;
+      filter: drop-shadow(0 10px 15px rgba(245, 179, 53, 0.4));
+    }
+    .kandil-left { left: 4%; animation-delay: 0.2s; }
+    .kandil-right { right: 4%; animation-delay: 1.2s; }
+
+    @keyframes swingLantern {
+      0% { transform: rotate(-5deg); }
+      100% { transform: rotate(5deg); }
+    }
+
+    /* Canvas Fireworks */
+    #fireworks-canvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    .app-wrapper {
+      position: relative;
+      z-index: 10;
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 50px 20px 80px;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    /* Typography */
+    .hindi-title {
+      font-family: 'Rozha One', 'Yatra One', serif;
+      font-size: 2.8rem;
+      background: linear-gradient(135deg, #fff 0%, var(--gold-light) 40%, var(--gold-primary) 70%, #d4931a 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      text-shadow: 0 0 25px var(--gold-glow);
+      text-align: center;
+      line-height: 1.25;
+      margin-bottom: 12px;
+    }
+
+    .subtitle {
+      font-size: 1.05rem;
+      color: var(--text-muted);
+      text-align: center;
+      max-width: 580px;
+      margin: 0 auto 30px;
+      line-height: 1.6;
+    }
+
+    /* Diya Animation */
+    .diya-container {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 20px;
+      margin-bottom: 25px;
+    }
+
+    .diya-unit {
+      position: relative;
+      display: inline-flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .diya-flame {
+      width: 16px;
+      height: 26px;
+      background: radial-gradient(ellipse at bottom, #fff 10%, #ffd000 40%, #ff5100 85%, transparent 100%);
+      border-radius: 50% 50% 25% 25% / 60% 60% 35% 35%;
+      box-shadow: 0 0 18px #ff9100, 0 -4px 25px #ffd000;
+      animation: flicker 1.4s ease-in-out infinite alternate;
+      transform-origin: bottom center;
+    }
+
+    .diya-bowl {
+      width: 44px;
+      height: 18px;
+      background: linear-gradient(to bottom, #d97706, #92400e);
+      border-radius: 0 0 50px 50px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.5), inset 0 2px 5px rgba(255,255,255,0.3);
+      margin-top: -3px;
+    }
+
+    @keyframes flicker {
+      0% { transform: scale(1) rotate(-2deg); opacity: 0.95; }
+      50% { transform: scale(0.95, 1.05) rotate(-1deg); opacity: 0.9; }
+      100% { transform: scale(1.04, 0.98) rotate(2deg); opacity: 1; }
+    }
+
+    /* ROTATING / DANCING BORDER CARD */
+    .premium-card {
+      position: relative;
+      border-radius: var(--radius-lg);
+      padding: 34px 28px;
+      width: 100%;
+      max-width: 620px;
+      box-shadow: 0 16px 40px rgba(0, 0, 0, 0.7), 0 0 35px rgba(245, 179, 53, 0.25);
+      overflow: hidden;
+      z-index: 1;
+    }
+
+    /* 360 Degree Spinning Gradient Border */
+    .premium-card::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: conic-gradient(
+        from 0deg,
+        transparent 0deg,
+        #f5b335 50deg,
+        #ff3b30 110deg,
+        #ffd700 180deg,
+        #ff7700 250deg,
+        transparent 360deg
+      );
+      animation: rotateBorder 4s linear infinite;
+      z-index: -2;
+    }
+
+    .premium-card::after {
+      content: '';
+      position: absolute;
+      inset: 3px;
+      background: var(--bg-card);
+      border-radius: calc(var(--radius-lg) - 3px);
+      z-index: -1;
+    }
+
+    @keyframes rotateBorder {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    /* Form Fields */
+    .form-group {
+      margin-bottom: 22px;
+    }
+
+    .form-label {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.95rem;
+      font-weight: 600;
+      color: var(--gold-light);
+      margin-bottom: 8px;
+    }
+
+    .form-input, .form-textarea {
+      width: 100%;
+      padding: 14px 16px;
+      background: rgba(5, 13, 30, 0.75);
+      border: 1.5px solid rgba(245, 179, 53, 0.35);
+      border-radius: var(--radius-md);
+      color: #fff;
+      font-size: 0.95rem;
+      outline: none;
+      transition: all 0.25s ease;
+    }
+
+    .form-input:focus, .form-textarea:focus {
+      border-color: var(--gold-primary);
+      box-shadow: 0 0 15px rgba(245, 179, 53, 0.35);
+      background: rgba(8, 20, 48, 0.9);
+    }
+
+    .form-textarea {
+      min-height: 105px;
+      resize: vertical;
+      line-height: 1.5;
+    }
+
+    /* Photo Upload Area */
+    .photo-upload-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 14px;
+      padding: 18px;
+      background: rgba(5, 11, 26, 0.65);
+      border: 2px dashed rgba(245, 179, 53, 0.45);
+      border-radius: var(--radius-md);
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .photo-upload-container:hover {
+      border-color: var(--gold-primary);
+      background: rgba(14, 28, 62, 0.75);
+    }
+
+    .preview-frame {
+      width: 125px;
+      height: 125px;
+      border-radius: 50%;
+      border: 3px solid var(--gold-primary);
+      box-shadow: 0 0 20px rgba(245, 179, 53, 0.5);
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: #0f1c3a;
+    }
+
+    .preview-frame img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .upload-hint {
+      text-align: center;
+      font-size: 0.85rem;
+      color: var(--text-muted);
+    }
+
+    .photo-actions {
+      display: flex;
+      gap: 10px;
+      margin-top: 8px;
+    }
+
+    .btn-secondary-sm {
+      background: rgba(255, 255, 255, 0.1);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      color: #fff;
+      padding: 6px 14px;
+      font-size: 0.8rem;
+      border-radius: 30px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .btn-secondary-sm:hover {
+      background: rgba(255, 255, 255, 0.2);
+    }
+
+    /* Gold Button */
+    .btn-gold {
+      width: 100%;
+      background: linear-gradient(135deg, #ffd700 0%, #f59e0b 50%, #b45309 100%);
+      color: #3b1b02;
+      border: none;
+      padding: 16px 24px;
+      font-size: 1.15rem;
+      font-weight: 700;
+      border-radius: var(--radius-md);
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      box-shadow: 0 8px 25px rgba(245, 158, 11, 0.45);
+      transition: all 0.25s ease;
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+    }
+
+    .btn-gold:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 12px 30px rgba(245, 158, 11, 0.65);
+    }
+
+    /* ANIMATED WHATSAPP BUTTON (PULSING & SHAKING) */
+    .btn-whatsapp {
+      background: linear-gradient(135deg, #25d366 0%, #128c7e 100%);
+      color: #fff;
+      border: none;
+      padding: 18px 24px;
+      font-size: 1.25rem;
+      font-weight: 700;
+      border-radius: var(--radius-md);
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 14px;
+      width: 100%;
+      box-shadow: 0 0 25px rgba(37, 211, 102, 0.6);
+      transition: all 0.25s;
+      animation: waPulse 1.8s infinite ease-in-out;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .btn-whatsapp i {
+      animation: waShake 1.8s infinite ease-in-out;
+      font-size: 1.6rem;
+    }
+
+    @keyframes waPulse {
+      0% {
+        transform: scale(1);
+        box-shadow: 0 0 0 0 rgba(37, 211, 102, 0.7);
+      }
+      50% {
+        transform: scale(1.03);
+        box-shadow: 0 0 28px 10px rgba(37, 211, 102, 0.35);
+      }
+      100% {
+        transform: scale(1);
+        box-shadow: 0 0 0 0 rgba(37, 211, 102, 0);
+      }
+    }
+
+    @keyframes waShake {
+      0%, 100% { transform: rotate(0deg); }
+      10%, 30% { transform: rotate(-12deg); }
+      20%, 40% { transform: rotate(12deg); }
+      50% { transform: rotate(0deg); }
+    }
+
+    .btn-whatsapp:hover {
+      filter: brightness(1.12);
+      transform: scale(1.04);
+    }
+
+    /* Wish Greeting Card View */
+    .wish-display-card {
+      text-align: center;
+      padding: 40px 28px;
+    }
+
+    .wish-photo-frame {
+      width: 170px;
+      height: 170px;
+      margin: 0 auto 20px;
+      border-radius: 50%;
+      padding: 6px;
+      background: linear-gradient(135deg, #ffe082, #d97706, #ffe082);
+      box-shadow: 0 0 35px rgba(245, 179, 53, 0.6);
+      position: relative;
+    }
+
+    .wish-photo-frame img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      border-radius: 50%;
+      border: 3px solid #0a1329;
+    }
+
+    .sender-badge {
+      display: inline-block;
+      background: linear-gradient(90deg, rgba(217,119,6,0.3), rgba(245,158,11,0.5), rgba(217,119,6,0.3));
+      border: 1px solid var(--gold-light);
+      padding: 5px 20px;
+      border-radius: 50px;
+      color: var(--gold-light);
+      font-size: 0.9rem;
+      letter-spacing: 1px;
+      margin-bottom: 12px;
+    }
+
+    .wish-user-name {
+      font-family: 'Rozha One', 'Yatra One', serif;
+      font-size: 2.2rem;
+      color: #fff;
+      text-shadow: 0 0 15px var(--gold-glow);
+      margin-bottom: 16px;
+    }
+
+    .wish-message-quote {
+      font-size: 1.15rem;
+      line-height: 1.7;
+      color: #fef8eb;
+      background: rgba(5, 13, 30, 0.6);
+      border-left: 3px solid var(--gold-primary);
+      border-right: 3px solid var(--gold-primary);
+      padding: 18px;
+      border-radius: var(--radius-md);
+      margin-bottom: 24px;
+      font-style: italic;
+    }
+
+    .btn-action-sm {
+      padding: 12px 16px;
+      border-radius: var(--radius-md);
+      border: 1px solid rgba(245, 179, 53, 0.4);
+      background: rgba(255, 255, 255, 0.08);
+      color: #fff;
+      font-size: 0.9rem;
+      font-weight: 500;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      transition: all 0.2s;
+    }
+
+    .btn-action-sm:hover {
+      background: rgba(245, 179, 53, 0.2);
+    }
+
+    /* Crop Modal */
+    .modal-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.85);
+      backdrop-filter: blur(8px);
+      z-index: 999;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+
+    .modal-box {
+      background: #0d1833;
+      border: 1px solid var(--gold-primary);
+      border-radius: var(--radius-lg);
+      padding: 24px;
+      max-width: 480px;
+      width: 100%;
+      box-shadow: 0 20px 50px rgba(0,0,0,0.8);
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .cropper-container-box {
+      width: 100%;
+      height: 300px;
+      background: #050b1a;
+      overflow: hidden;
+      border-radius: var(--radius-md);
+    }
+
+    /* Toast Notification */
+    #toast {
+      position: fixed;
+      bottom: 30px;
+      left: 50%;
+      transform: translateX(-50%) translateY(100px);
+      background: #111f3d;
+      border: 1px solid var(--gold-primary);
+      box-shadow: 0 10px 30px rgba(0,0,0,0.7);
+      color: #fff;
+      padding: 12px 24px;
+      border-radius: 50px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 0.95rem;
+      z-index: 1000;
+      opacity: 0;
+      transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+
+    #toast.show {
+      transform: translateX(-50%) translateY(0);
+      opacity: 1;
+    }
+
+    .spinner {
+      display: inline-block;
+      width: 18px;
+      height: 18px;
+      border: 2px solid rgba(255, 255, 255, 0.3);
+      border-radius: 50%;
+      border-top-color: #fff;
+      animation: spin 1s ease-in-out infinite;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    @media (max-width: 640px) {
+      .hindi-title { font-size: 2.1rem; }
+      .premium-card { padding: 24px 18px; }
+      .wish-user-name { font-size: 1.8rem; }
+      .wish-photo-frame { width: 140px; height: 140px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Top Toran -->
+  <div class="festive-toran"></div>
+
+  <!-- Hanging Decorative Lanterns -->
+  <svg class="hanging-kandil kandil-left" width="55" height="110" viewBox="0 0 60 120" fill="none">
+    <line x1="30" y1="0" x2="30" y2="40" stroke="#f5b335" stroke-width="2"/>
+    <polygon points="30,40 50,60 30,80 10,60" fill="#dc2626" stroke="#f5b335" stroke-width="2"/>
+    <polygon points="30,50 42,60 30,70 18,60" fill="#f59e0b"/>
+    <line x1="18" y1="80" x2="10" y2="115" stroke="#f5b335" stroke-width="1.5"/>
+    <line x1="26" y1="80" x2="22" y2="120" stroke="#f5b335" stroke-width="1.5"/>
+    <line x1="34" y1="80" x2="38" y2="120" stroke="#f5b335" stroke-width="1.5"/>
+    <line x1="42" y1="80" x2="50" y2="115" stroke="#f5b335" stroke-width="1.5"/>
+  </svg>
+
+  <svg class="hanging-kandil kandil-right" width="55" height="110" viewBox="0 0 60 120" fill="none">
+    <line x1="30" y1="0" x2="30" y2="40" stroke="#f5b335" stroke-width="2"/>
+    <polygon points="30,40 50,60 30,80 10,60" fill="#dc2626" stroke="#f5b335" stroke-width="2"/>
+    <polygon points="30,50 42,60 30,70 18,60" fill="#f59e0b"/>
+    <line x1="18" y1="80" x2="10" y2="115" stroke="#f5b335" stroke-width="1.5"/>
+    <line x1="26" y1="80" x2="22" y2="120" stroke="#f5b335" stroke-width="1.5"/>
+    <line x1="34" y1="80" x2="38" y2="120" stroke="#f5b335" stroke-width="1.5"/>
+    <line x1="42" y1="80" x2="50" y2="115" stroke="#f5b335" stroke-width="1.5"/>
+  </svg>
+
+  <!-- Fireworks Canvas -->
+  <canvas id="fireworks-canvas"></canvas>
+
+  <div class="app-wrapper">
+    
+    <!-- Diyas Header -->
+    <div class="diya-container">
+      <div class="diya-unit">
+        <div class="diya-flame"></div>
+        <div class="diya-bowl"></div>
+      </div>
+      <div class="diya-unit" style="transform: scale(1.25);">
+        <div class="diya-flame" style="animation-duration: 1.1s;"></div>
+        <div class="diya-bowl"></div>
+      </div>
+      <div class="diya-unit">
+        <div class="diya-flame" style="animation-duration: 1.6s;"></div>
+        <div class="diya-bowl"></div>
+      </div>
+    </div>
+
+    <!-- Main Title -->
+    <h1 class="hindi-title">🪔 शुभ दीपावली 🪔</h1>
+    <p class="subtitle">रोशनी का यह पावन पर्व आपके और आपके परिवार के जीवन में सुख, शांति, समृद्धि और अपार खुशियां लेकर आए।</p>
+
+    <!-- SECTION 1: CREATE WISH FORM -->
+    <div id="createWishSection" class="premium-card">
+      <div style="text-align: center; margin-bottom: 22px;">
+        <h2 style="font-size: 1.35rem; color: var(--gold-light); margin-bottom: 6px;">
+          <i class="fas fa-magic"></i> अपना निजी दीवाली कार्ड बनाएं
+        </h2>
+        <p style="font-size: 0.85rem; color: var(--text-muted);">
+          अपनी फोटो और नाम डालकर WhatsApp पर भेजने योग्य सुंदर लिंक तैयार करें
+        </p>
+      </div>
+
+      <form id="wishForm" onsubmit="handleCreateWish(event)">
+        <!-- Photo Upload & Cropper Trigger -->
+        <div class="form-group">
+          <label class="form-label">
+            <i class="fas fa-camera"></i> आपकी फोटो (Upload Your Photo)
+          </label>
+          <div class="photo-upload-container" id="photoDropArea" onclick="document.getElementById('photoInput').click()">
+            <input type="file" id="photoInput" accept="image/jpeg,image/png,image/webp,image/jpg" style="display:none;" onchange="handleFileSelect(event)">
+            <div class="preview-frame" id="photoPreviewContainer">
+              <i class="fas fa-user" id="placeholderIcon" style="font-size: 3.2rem; color: rgba(245, 179, 53, 0.5);"></i>
+              <img id="imagePreview" src="" alt="Preview" style="display: none;">
+            </div>
+            <div class="upload-hint">
+              <span style="color: var(--gold-primary); font-weight: 600;">क्लिक करके फोटो चुनें</span><br>
+              JPG, PNG या WEBP (अधिकतम 5MB)
+            </div>
+          </div>
+          <div class="photo-actions" id="photoActions" style="display: none; justify-content: center;">
+            <button type="button" class="btn-secondary-sm" onclick="reopenCropper()"><i class="fas fa-crop-alt"></i> क्रॉप बदलें</button>
+            <button type="button" class="btn-secondary-sm" style="color:#ef4444;" onclick="removeSelectedPhoto()"><i class="fas fa-trash"></i> हटाएं</button>
+          </div>
+        </div>
+
+        <!-- Name Input -->
+        <div class="form-group">
+          <label class="form-label" for="userName">
+            <i class="fas fa-user-tag"></i> आपका नाम (Your Name)
+          </label>
+          <input type="text" id="userName" class="form-input" placeholder="उदा. राजू कुमार / Raju Kumar" required maxlength="50">
+        </div>
+
+        <!-- Message Textarea -->
+        <div class="form-group">
+          <label class="form-label" for="userGreeting">
+            <i class="fas fa-comment-dots"></i> शुभकामना संदेश (Greeting Message)
+          </label>
+          <textarea id="userGreeting" class="form-textarea" required maxlength="300">आपको और आपके पूरे परिवार को दीपावली की हार्दिक शुभकामनाएं। यह पावन पर्व आपके जीवन को सुख, समृद्धि और आरोग्य की रोशनी से भर दे!</textarea>
+        </div>
+
+        <!-- Submit Button -->
+        <button type="submit" class="btn-gold" id="submitBtn">
+          <i class="fas fa-paper-plane"></i> <span id="submitBtnText">दीवाली शुभकामना लिंक बनाएं</span>
+        </button>
+      </form>
+    </div>
+
+    <!-- SECTION 2: WISH DISPLAY CARD (WhatsApp Ready) -->
+    <div id="viewWishSection" class="premium-card wish-display-card" style="display: none;">
+      <div class="wish-photo-frame">
+        <img id="displayUserPhoto" src="https://placehold.co/300x300/0f1c3a/f5b335?text=Diwali" alt="Sender Photo">
+      </div>
+
+      <div class="sender-badge">विशेष दीवाली शुभकामना</div>
+      <h2 class="wish-user-name" id="displayUserName">शुभचिंतक का नाम</h2>
+
+      <div class="wish-message-quote" id="displayGreetingMessage">
+        "दीयों की रोशनी से जगमगाता आपका संसार हो, इस दीवाली आपके घर में खुशियों की बहार हो।"
+      </div>
+
+      <p style="font-size: 0.95rem; color: var(--gold-light); margin-bottom: 24px;">
+        आपकी तरफ से सस्नेह प्यार और हार्दिक शुभकामनाएं ❤️✨
+      </p>
+
+      <!-- EXCLUSIVELY WHATSAPP SHARE SYSTEM -->
+      <div style="display: flex; flex-direction: column; gap: 14px;">
+        <button class="btn-whatsapp" onclick="shareOnWhatsApp()">
+          <i class="fab fa-whatsapp"></i> WhatsApp पर शेयर करें
+        </button>
+
+        <div style="display: flex; gap: 10px; justify-content: center; margin-top: 6px;">
+          <button class="btn-action-sm" onclick="speakGreetingMessage()">
+            <i class="fas fa-volume-up" style="color: var(--gold-primary);"></i> संदेश फिर से सुनें
+          </button>
+          <button class="btn-action-sm" onclick="showCreateMode()">
+            <i class="fas fa-plus-circle"></i> नया Wish बनाएं
+          </button>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Image Cropping Modal -->
+  <div class="modal-overlay" id="cropModal">
+    <div class="modal-box">
+      <h3 style="color: var(--gold-light); font-size: 1.1rem; text-align: center;">
+        <i class="fas fa-crop"></i> फोटो को एडजस्ट करें (Crop to Circle)
+      </h3>
+      <div class="cropper-container-box">
+        <img id="cropperImageSource" src="" alt="Crop Area" style="max-width: 100%;">
+      </div>
+      <div style="display: flex; gap: 10px;">
+        <button type="button" class="btn-action-sm" style="flex: 1;" onclick="closeCropperModal()">रद्द करें</button>
+        <button type="button" class="btn-gold" style="flex: 2; padding: 10px;" onclick="applyCroppedImage()">क्रॉप और सेव करें</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast Notification -->
+  <div id="toast">
+    <i class="fas fa-check-circle" style="color: var(--gold-primary);"></i>
+    <span id="toastMsg">सफलतापूर्वक पूर्ण हुआ!</span>
+  </div>
+
+  <!-- Core JavaScript -->
+  <script>
+    // 1. SUPABASE CLIENT
+    const SUPABASE_PROJECT_URL = "https://uaoveseiyzftqornhgpt.supabase.co";
+    const SUPABASE_ANON_KEY = "sb_publishable_CkjwInj9XCsmhkRq3sdMlQ_2Fi6gMYh";
+    const STORAGE_BUCKET = "diwali-photos";
+
+    let supabaseClient = null;
+    try {
+      if (window.supabase && SUPABASE_PROJECT_URL && SUPABASE_ANON_KEY) {
+        supabaseClient = window.supabase.createClient(SUPABASE_PROJECT_URL, SUPABASE_ANON_KEY);
+      }
+    } catch (err) {
+      console.warn("Supabase init warning:", err);
+    }
+
+    let currentCroppedBlob = null;
+    let cropperInstance = null;
+    let activeWishData = null;
+
+    // 2. TEXT-TO-SPEECH (वेबसाइट खुलते ही शुभकामना संदेश बोलकर सुनाना)
+    function speakGreetingMessage() {
+      if (!('speechSynthesis' in window)) return;
+
+      window.speechSynthesis.cancel(); // Stop active speech
+
+      let textToRead = "";
+      if (activeWishData) {
+        textToRead = `${activeWishData.user_name || ''} की तरफ से शुभ दीपावली। ${activeWishData.greeting_message || ''}`;
+      } else {
+        const defaultMsg = document.getElementById('userGreeting') ? document.getElementById('userGreeting').value : '';
+        textToRead = `शुभ दीपावली। ${defaultMsg}`;
+      }
+
+      const utterance = new SpeechSynthesisUtterance(textToRead);
+      utterance.lang = 'hi-IN';
+      utterance.rate = 0.92;
+      utterance.pitch = 1.05;
+
+      const voices = window.speechSynthesis.getVoices();
+      const hindiVoice = voices.find(v => v.lang && (v.lang.includes('hi') || v.lang.includes('HI')));
+      if (hindiVoice) {
+        utterance.voice = hindiVoice;
+      }
+
+      window.speechSynthesis.speak(utterance);
+    }
+
+    function attemptAutoSpeak() {
+      const startSpeak = () => {
+        speakGreetingMessage();
+        document.removeEventListener('click', startSpeak);
+        document.removeEventListener('touchstart', startSpeak);
+      };
+
+      try {
+        speakGreetingMessage();
+      } catch (e) {
+        console.warn("Autoplay voice restriction:", e);
+      }
+
+      document.addEventListener('click', startSpeak, { once: true });
+      document.addEventListener('touchstart', startSpeak, { once: true });
+    }
+
+    // 3. CANVAS FIREWORKS
+    const canvas = document.getElementById('fireworks-canvas');
+    const ctx = canvas.getContext('2d');
+    let particles = [];
+
+    function resizeCanvas() {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    }
+    window.addEventListener('resize', resizeCanvas);
+    resizeCanvas();
+
+    class FireworkParticle {
+      constructor(x, y, color) {
+        this.x = x;
+        this.y = y;
+        this.color = color;
+        const angle = Math.random() * Math.PI * 2;
+        const speed = Math.random() * 4 + 1;
+        this.vx = Math.cos(angle) * speed;
+        this.vy = Math.sin(angle) * speed;
+        this.alpha = 1;
+        this.friction = 0.96;
+        this.gravity = 0.06;
+        this.decay = Math.random() * 0.02 + 0.012;
+      }
+      update() {
+        this.vx *= this.friction;
+        this.vy *= this.friction;
+        this.vy += this.gravity;
+        this.x += this.vx;
+        this.y += this.vy;
+        this.alpha -= this.decay;
+      }
+      draw(c) {
+        c.save();
+        c.globalAlpha = Math.max(0, this.alpha);
+        c.fillStyle = this.color;
+        c.beginPath();
+        c.arc(this.x, this.y, 2.2, 0, Math.PI * 2);
+        c.fill();
+        c.restore();
+      }
+    }
+
+    function createRocketExplosion(x, y) {
+      const colors = ['#f59e0b', '#fbbf24', '#f43f5e', '#10b981', '#38bdf8', '#a855f7'];
+      const chosenColor = colors[Math.floor(Math.random() * colors.length)];
+      for (let i = 0; i < 40; i++) {
+        particles.push(new FireworkParticle(x, y, chosenColor));
+      }
+    }
+
+    let lastFireworkTime = 0;
+    function fireworksLoop(time) {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+      if (time - lastFireworkTime > 1800) {
+        const x = Math.random() * canvas.width * 0.8 + canvas.width * 0.1;
+        const y = Math.random() * canvas.height * 0.45 + 50;
+        createRocketExplosion(x, y);
+        lastFireworkTime = time;
+      }
+
+      for (let i = particles.length - 1; i >= 0; i--) {
+        particles[i].update();
+        particles[i].draw(ctx);
+        if (particles[i].alpha <= 0) {
+          particles.splice(i, 1);
+        }
+      }
+
+      requestAnimationFrame(fireworksLoop);
+    }
+    requestAnimationFrame(fireworksLoop);
+
+    // 4. IMAGE HANDLING & CROPPER
+    function handleFileSelect(e) {
+      const file = e.target.files[0];
+      if (!file) return;
+
+      if (!['image/jpeg', 'image/png', 'image/webp', 'image/jpg'].includes(file.type)) {
+        showToast("कृपया वैध फोटो चुनें (JPG, PNG, WEBP)");
+        return;
+      }
+      if (file.size > 5 * 1024 * 1024) {
+        showToast("फोटो 5MB से छोटी होनी चाहिए");
+        return;
+      }
+
+      const reader = new FileReader();
+      reader.onload = function(evt) {
+        document.getElementById('cropperImageSource').src = evt.target.result;
+        openCropperModal();
+      };
+      reader.readAsDataURL(file);
+    }
+
+    function openCropperModal() {
+      document.getElementById('cropModal').style.display = 'flex';
+      const image = document.getElementById('cropperImageSource');
+
+      if (cropperInstance) cropperInstance.destroy();
+
+      cropperInstance = new Cropper(image, {
+        aspectRatio: 1,
+        viewMode: 1,
+        autoCropArea: 0.9,
+        background: false,
+        responsive: true
+      });
+    }
+
+    function closeCropperModal() {
+      document.getElementById('cropModal').style.display = 'none';
+      if (cropperInstance) {
+        cropperInstance.destroy();
+        cropperInstance = null;
+      }
+    }
+
+    function applyCroppedImage() {
+      if (!cropperInstance) return;
+
+      const canvasCropped = cropperInstance.getCroppedCanvas({
+        width: 400,
+        height: 400,
+        imageSmoothingQuality: 'high'
+      });
+
+      canvasCropped.toBlob((blob) => {
+        currentCroppedBlob = blob;
+        document.getElementById('imagePreview').src = URL.createObjectURL(blob);
+        document.getElementById('imagePreview').style.display = 'block';
+        document.getElementById('placeholderIcon').style.display = 'none';
+        document.getElementById('photoActions').style.display = 'flex';
+        closeCropperModal();
+        showToast("फोटो सेट हो गई! ✨");
+      }, 'image/jpeg', 0.9);
+    }
+
+    function reopenCropper() {
+      if (document.getElementById('imagePreview').src) {
+        document.getElementById('cropperImageSource').src = document.getElementById('imagePreview').src;
+        openCropperModal();
+      }
+    }
+
+    function removeSelectedPhoto() {
+      currentCroppedBlob = null;
+      document.getElementById('photoInput').value = '';
+      document.getElementById('imagePreview').src = '';
+      document.getElementById('imagePreview').style.display = 'none';
+      document.getElementById('placeholderIcon').style.display = 'block';
+      document.getElementById('photoActions').style.display = 'none';
+      showToast("फोटो हटा दी गई");
+    }
+
+    // 5. WISH GENERATION & SUPABASE
+    function generateUniqueWishCode() {
+      const chars = 'abcdefghijklmnopqrstuvwxyz0123456789';
+      let code = '';
+      for (let i = 0; i < 7; i++) {
+        code += chars.charAt(Math.floor(Math.random() * chars.length));
+      }
+      return code;
+    }
+
+    async function handleCreateWish(e) {
+      e.preventDefault();
+      const nameInput = document.getElementById('userName').value.trim();
+      const messageInput = document.getElementById('userGreeting').value.trim();
+      const submitBtn = document.getElementById('submitBtn');
+      const submitBtnText = document.getElementById('submitBtnText');
+
+      if (!nameInput) {
+        showToast("कृपया अपना नाम भरें");
+        return;
+      }
+
+      submitBtn.disabled = true;
+      submitBtnText.innerHTML = `<span class="spinner"></span> विश तैयार हो रही है...`;
+
+      try {
+        const wishCode = generateUniqueWishCode();
+        let uploadedPhotoUrl = 'https://images.unsplash.com/photo-1605629921711-2f6b00c6bbf4?auto=format&fit=crop&w=600&q=80';
+
+        if (currentCroppedBlob && supabaseClient) {
+          try {
+            const fileName = `${wishCode}_${Date.now()}.jpg`;
+            const { data: uploadData, error: uploadErr } = await supabaseClient.storage
+              .from(STORAGE_BUCKET)
+              .upload(fileName, currentCroppedBlob, {
+                contentType: 'image/jpeg',
+                cacheControl: '3600',
+                upsert: false
+              });
+
+            if (!uploadErr && uploadData) {
+              const { data: urlData } = supabaseClient.storage
+                .from(STORAGE_BUCKET)
+                .getPublicUrl(fileName);
+              uploadedPhotoUrl = urlData.publicUrl;
+            } else {
+              uploadedPhotoUrl = await blobToDataURL(currentCroppedBlob);
+            }
+          } catch (stgErr) {
+            uploadedPhotoUrl = await blobToDataURL(currentCroppedBlob);
+          }
+        } else if (currentCroppedBlob) {
+          uploadedPhotoUrl = await blobToDataURL(currentCroppedBlob);
+        }
+
+        const wishRecord = {
+          wish_code: wishCode,
+          user_name: nameInput,
+          greeting_message: messageInput,
+          photo_url: uploadedPhotoUrl
+        };
+
+        if (supabaseClient) {
+          try {
+            await supabaseClient.from('diwali_wishes').insert([wishRecord]);
+          } catch (dErr) {
+            console.warn("Supabase insert exception:", dErr);
+          }
+        }
+
+        try {
+          if (window.location.protocol.startsWith('http')) {
+            const newUrl = new URL(window.location.href);
+            newUrl.searchParams.set('w', wishCode);
+            window.history.pushState({ wishCode }, '', `${newUrl.pathname}?w=${wishCode}`);
+          }
+        } catch (historyErr) {
+          console.warn("History pushState skipped:", historyErr);
+        }
+
+        activeWishData = wishRecord;
+        renderWishCard(wishRecord);
+        triggerConfettiCelebration();
+        speakGreetingMessage();
+        showToast("🪔 आपकी दीवाली विश तैयार हो गई!");
+
+      } catch (err) {
+        console.error("Wish creation error:", err);
+        showToast("त्रुटि हुई, पुनः प्रयास करें।");
+      } finally {
+        submitBtn.disabled = false;
+        submitBtnText.innerHTML = `दीवाली शुभकामना लिंक बनाएं`;
+      }
+    }
+
+    function blobToDataURL(blob) {
+      return new Promise((resolve) => {
+        const reader = new FileReader();
+        reader.onloadend = () => resolve(reader.result);
+        reader.readAsDataURL(blob);
+      });
+    }
+
+    // 6. RENDER & ROUTING
+    function renderWishCard(wish) {
+      document.getElementById('createWishSection').style.display = 'none';
+      document.getElementById('viewWishSection').style.display = 'block';
+
+      document.getElementById('displayUserName').innerText = wish.user_name || 'शुभचिंतक';
+      document.getElementById('displayGreetingMessage').innerText = `"${wish.greeting_message}"`;
+      
+      const photoEl = document.getElementById('displayUserPhoto');
+      photoEl.src = wish.photo_url || 'https://images.unsplash.com/photo-1605629921711-2f6b00c6bbf4?auto=format&fit=crop&w=600&q=80';
+      photoEl.onerror = () => {
+        photoEl.src = 'https://placehold.co/300x300/0f1c3a/f5b335?text=Shubh+Diwali';
+      };
+
+      activeWishData = wish;
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+      speakGreetingMessage();
+    }
+
+    function showCreateMode() {
+      document.getElementById('viewWishSection').style.display = 'none';
+      document.getElementById('createWishSection').style.display = 'block';
+      try {
+        if (window.location.protocol.startsWith('http')) {
+          const cleanUrl = new URL(window.location.href);
+          cleanUrl.searchParams.delete('w');
+          window.history.pushState({}, '', cleanUrl.toString());
+        }
+      } catch (historyErr) {
+        console.warn("History pushState skipped:", historyErr);
+      }
+      window.scrollTo({ top: 100, behavior: 'smooth' });
+    }
+
+    async function loadWishFromUrlParams() {
+      try {
+        let wishCode = null;
+        const urlParams = new URLSearchParams(window.location.search);
+        if (urlParams.get('w')) {
+          wishCode = urlParams.get('w');
+        }
+
+        if (!wishCode && window.location.pathname) {
+          const match = window.location.pathname.match(/\/wish\/([a-zA-Z0-9_-]+)/);
+          if (match && match[1]) {
+            wishCode = match[1];
+          }
+        }
+
+        if (!wishCode) return;
+
+        if (supabaseClient) {
+          try {
+            const { data, error } = await supabaseClient
+              .from('diwali_wishes')
+              .select('*')
+              .eq('wish_code', wishCode)
+              .single();
+
+            if (data && !error) {
+              renderWishCard(data);
+              triggerConfettiCelebration();
+              return;
+            }
+          } catch (e) {
+            console.warn("Error fetching wish:", e);
+          }
+        }
+
+        // Fallback wish display
+        renderWishCard({
+          wish_code: wishCode,
+          user_name: 'शुभचिंतक',
+          greeting_message: 'आपको और आपके पूरे परिवार को दीपावली की हार्दिक शुभकामनाएं। यह पावन पर्व आपके जीवन में खुशियां और समृद्धि लाए!',
+          photo_url: 'https://images.unsplash.com/photo-1605629921711-2f6b00c6bbf4?auto=format&fit=crop&w=600&q=80'
+        });
+      } catch (e) {
+        console.warn("URL parameter error:", e);
+      }
+    }
+
+    // 7. WHATSAPP EXCLUSIVE SHARING
+    function getShareableUrl() {
+      const wishCode = activeWishData ? activeWishData.wish_code : 'diwali2026';
+      let baseUrl = window.location.origin;
+
+      if (!baseUrl || baseUrl === 'null' || baseUrl.startsWith('blob:')) {
+        baseUrl = 'https://diwali-wishes.netlify.app';
+      }
+
+      return `${baseUrl}/?w=${wishCode}`;
+    }
+
+    function shareOnWhatsApp() {
+      const senderName = activeWishData ? activeWishData.user_name : 'मेरे';
+      const shareUrl = getShareableUrl();
+
+      const message = `🪔 *शुभ दीपावली!* 🪔\n\n` +
+                      `*${senderName}* की तरफ से आपके और आपके पूरे परिवार के लिए एक विशेष दीवाली शुभकामना संदेश भेजा गया है ❤️✨\n\n` +
+                      `नीचे दिए गए लिंक को खोलकर अपना खास ग्रीटिंग कार्ड देखें 👇\n` +
+                      `${shareUrl}\n\n` +
+                      `✨ _रोशनी का यह त्योहार आपके जीवन में अपार खुशियां और समृद्धि लेकर आए!_ ✨`;
+
+      const encodedMsg = encodeURIComponent(message);
+      const isMobile = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
+      
+      const waUrl = isMobile 
+        ? `whatsapp://send?text=${encodedMsg}`
+        : `https://api.whatsapp.com/send?text=${encodedMsg}`;
+
+      window.open(waUrl, '_blank');
+      triggerConfettiCelebration();
+    }
+
+    function triggerConfettiCelebration() {
+      if (typeof confetti === 'function') {
+        confetti({
+          particleCount: 70,
+          spread: 70,
+          origin: { y: 0.6 },
+          colors: ['#f5b335', '#ffd700', '#dc2626', '#22c55e']
+        });
+      }
+    }
+
+    function showToast(msg) {
+      const toast = document.getElementById('toast');
+      document.getElementById('toastMsg').innerText = msg;
+      toast.classList.add('show');
+      setTimeout(() => {
+        toast.classList.remove('show');
+      }, 3200);
+    }
+
+    window.addEventListener('DOMContentLoaded', () => {
+      loadWishFromUrlParams();
+      setTimeout(attemptAutoSpeak, 800);
+    });
+  </script>
+</body>
+</html>
