@@ -24,7 +24,7 @@
       --gold-light: #fff2a3;
       --gold-dark: #b8860b;
       --accent-red: #c9182b;
-      --card-bg: rgba(10, 20, 44, 0.92);
+      --card-bg: rgba(10, 20, 44, 0.94);
     }
 
     * {
@@ -44,15 +44,14 @@
     }
 
     /* =========================================
-       1. ROYAL CURTAIN (AUTO-OPEN CSS ANIMATION)
+       1. ROYAL CURTAIN (FIXED CLICK ISSUE)
        ========================================= */
     #curtain-container {
       position: fixed;
       inset: 0;
       z-index: 99999;
-      pointer-events: none;
+      pointer-events: none !important; /* Click issue resolved */
       display: flex;
-      animation: hideCurtainBox 0.1s linear 2.5s forwards;
     }
 
     .curtain {
@@ -61,6 +60,7 @@
       background: radial-gradient(circle at 50% 50%, #990a1e, #450009 85%);
       box-shadow: inset 0 0 60px rgba(0,0,0,0.85);
       position: relative;
+      pointer-events: none !important;
     }
 
     .curtain::before {
@@ -74,12 +74,12 @@
 
     .curtain-left {
       border-right: 4px solid #ffd700;
-      animation: openCurtainLeft 2s cubic-bezier(0.77, 0, 0.175, 1) 0.5s forwards;
+      animation: openCurtainLeft 1.8s cubic-bezier(0.77, 0, 0.175, 1) 0.4s forwards;
     }
 
     .curtain-right {
       border-left: 4px solid #ffd700;
-      animation: openCurtainRight 2s cubic-bezier(0.77, 0, 0.175, 1) 0.5s forwards;
+      animation: openCurtainRight 1.8s cubic-bezier(0.77, 0, 0.175, 1) 0.4s forwards;
     }
 
     .curtain-logo {
@@ -92,31 +92,28 @@
       font-size: 24px;
       text-align: center;
       z-index: 100000;
-      background: rgba(10, 20, 44, 0.95);
-      padding: 18px 28px;
+      background: rgba(10, 20, 44, 0.96);
+      padding: 16px 26px;
       border-radius: 20px;
       border: 2px solid var(--gold-primary);
       box-shadow: 0 0 35px rgba(246, 195, 67, 0.7);
-      animation: fadeOutBadge 0.6s ease-in 1.4s forwards;
+      animation: fadeOutBadge 0.5s ease-in 1.2s forwards;
+      pointer-events: none !important;
     }
 
     @keyframes openCurtainLeft {
       0% { transform: translateX(0); }
-      100% { transform: translateX(-100%); }
+      100% { transform: translateX(-105%); }
     }
 
     @keyframes openCurtainRight {
       0% { transform: translateX(0); }
-      100% { transform: translateX(100%); }
+      100% { transform: translateX(105%); }
     }
 
     @keyframes fadeOutBadge {
       0% { opacity: 1; transform: translate(-50%, -50%) scale(1); }
-      100% { opacity: 0; transform: translate(-50%, -50%) scale(0.7); visibility: hidden; }
-    }
-
-    @keyframes hideCurtainBox {
-      to { display: none; }
+      100% { opacity: 0; transform: translate(-50%, -50%) scale(0.7); display: none; }
     }
 
     /* Background Canvas */
@@ -130,17 +127,16 @@
       pointer-events: none;
     }
 
-    /* Festive Top Banner */
+    /* Top Festive Border */
     .festive-toran {
       width: 100%;
-      height: 18px;
+      height: 16px;
       background: repeating-linear-gradient(45deg, #c9182b, #c9182b 15px, #f6c343 15px, #f6c343 30px, #ff7b00 30px, #ff7b00 45px);
       box-shadow: 0 4px 12px rgba(0,0,0,0.6);
       position: relative;
       z-index: 10;
     }
 
-    /* Hanging Animated Diyas */
     .diya-hangers {
       display: flex;
       justify-content: space-around;
@@ -149,6 +145,7 @@
       padding-top: 5px;
       position: relative;
       z-index: 10;
+      pointer-events: none;
     }
 
     .diya-hanger {
@@ -169,7 +166,7 @@
     }
 
     .hanger-diya {
-      font-size: 28px;
+      font-size: 26px;
       filter: drop-shadow(0 0 12px #ff9900);
       line-height: 1;
     }
@@ -182,20 +179,19 @@
     .container {
       max-width: 480px;
       margin: 0 auto;
-      padding: 15px 16px 40px;
+      padding: 12px 16px 40px;
       position: relative;
-      z-index: 5;
+      z-index: 100;
     }
 
-    /* Main Title */
     .title-box {
       text-align: center;
-      margin: 15px 0 20px;
+      margin: 12px 0 18px;
     }
 
     .main-title {
       font-family: 'Rozha One', serif;
-      font-size: 34px;
+      font-size: 32px;
       color: var(--gold-primary);
       text-shadow: 0 0 15px rgba(246, 195, 67, 0.6), 0 0 30px rgba(255, 120, 0, 0.4);
       display: flex;
@@ -207,13 +203,13 @@
     .sub-title {
       font-size: 13px;
       color: #e2e8f0;
-      margin-top: 6px;
+      margin-top: 4px;
       line-height: 1.5;
       font-weight: 300;
     }
 
     /* =========================================
-       2. ROTATING DANCING BORDER CARD
+       2. DANCING BORDER CARD
        ========================================= */
     .animated-border-card {
       position: relative;
@@ -236,18 +232,18 @@
       background: var(--card-bg);
       backdrop-filter: blur(12px);
       border-radius: 23px;
-      padding: 24px 18px;
+      padding: 22px 18px;
       text-align: center;
+      position: relative;
+      z-index: 102;
     }
 
-    /* =========================================
-       3. BIG & ANIMATED USER PHOTO
-       ========================================= */
+    /* Big Animated Photo */
     .big-photo-wrapper {
       position: relative;
-      width: 220px;
-      height: 220px;
-      margin: 10px auto 20px;
+      width: 210px;
+      height: 210px;
+      margin: 10px auto 18px;
       border-radius: 50%;
       padding: 6px;
       background: linear-gradient(135deg, #ffe066, #ff7700, #ff0055, #ffd700);
@@ -264,7 +260,7 @@
 
     @keyframes photoFloat {
       0% { transform: translateY(0) scale(1); }
-      100% { transform: translateY(-8px) scale(1.02); }
+      100% { transform: translateY(-7px) scale(1.02); }
     }
 
     .big-photo-wrapper img {
@@ -280,9 +276,9 @@
       display: inline-block;
       background: linear-gradient(90deg, #ff9900, #ff4500);
       color: #fff;
-      font-size: 12px;
+      font-size: 11px;
       font-weight: 700;
-      padding: 4px 16px;
+      padding: 4px 14px;
       border-radius: 20px;
       letter-spacing: 1px;
       text-transform: uppercase;
@@ -292,23 +288,23 @@
 
     .user-name-text {
       font-family: 'Yatra One', cursive;
-      font-size: 29px;
+      font-size: 28px;
       color: var(--gold-primary);
       text-shadow: 0 0 12px rgba(246, 195, 67, 0.5);
-      margin-bottom: 15px;
+      margin-bottom: 12px;
     }
 
     .greeting-quote-box {
       background: rgba(255, 255, 255, 0.05);
       border: 1px dashed rgba(246, 195, 67, 0.4);
       border-radius: 14px;
-      padding: 16px;
-      margin: 15px 0 20px;
+      padding: 14px;
+      margin: 12px 0 18px;
       position: relative;
     }
 
     .greeting-quote-box p {
-      font-size: 15px;
+      font-size: 14.5px;
       line-height: 1.6;
       color: #fff2a3;
       font-style: italic;
@@ -318,19 +314,23 @@
       display: inline-flex;
       align-items: center;
       gap: 6px;
-      background: rgba(246, 195, 67, 0.15);
+      background: rgba(246, 195, 67, 0.2);
       border: 1px solid var(--gold-primary);
-      padding: 5px 14px;
-      border-radius: 15px;
+      padding: 6px 16px;
+      border-radius: 18px;
       font-size: 12px;
-      color: var(--gold-light);
+      font-weight: 600;
+      color: #fff;
       cursor: pointer;
       margin-top: 10px;
+      user-select: none;
     }
 
-    /* =========================================
-       4. ANIMATED WHATSAPP SHARE BUTTON
-       ========================================= */
+    .voice-badge:active {
+      transform: scale(0.95);
+    }
+
+    /* WhatsApp Button Animated */
     .btn-wa-animated {
       display: flex;
       align-items: center;
@@ -340,25 +340,26 @@
       background: linear-gradient(135deg, #25D366, #128C7E);
       color: #fff;
       text-decoration: none;
-      font-size: 17px;
+      font-size: 16.5px;
       font-weight: 700;
-      padding: 16px;
+      padding: 15px;
       border-radius: 35px;
       border: 2px solid #55efc4;
       box-shadow: 0 8px 25px rgba(37, 211, 102, 0.5);
       animation: waPulse 1.8s infinite;
       cursor: pointer;
-      margin-top: 15px;
+      margin-top: 14px;
+      user-select: none;
     }
 
     .btn-wa-animated i {
-      font-size: 26px;
+      font-size: 24px;
       animation: waShake 1s infinite alternate;
     }
 
     @keyframes waPulse {
       0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(37, 211, 102, 0.7); }
-      70% { transform: scale(1.02); box-shadow: 0 0 0 16px rgba(37, 211, 102, 0); }
+      70% { transform: scale(1.02); box-shadow: 0 0 0 14px rgba(37, 211, 102, 0); }
       100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(37, 211, 102, 0); }
     }
 
@@ -377,19 +378,19 @@
       border: 1px solid rgba(246, 195, 67, 0.5);
       font-size: 14px;
       font-weight: 600;
-      padding: 12px 24px;
+      padding: 12px 22px;
       border-radius: 25px;
       cursor: pointer;
-      margin-top: 16px;
-      text-decoration: none;
+      margin-top: 14px;
+      user-select: none;
       transition: all 0.3s;
     }
 
     .btn-create-own:hover {
-      background: rgba(246, 195, 67, 0.12);
+      background: rgba(246, 195, 67, 0.15);
     }
 
-    /* Form Section */
+    /* Form Fields */
     .form-group {
       text-align: left;
       margin-bottom: 16px;
@@ -405,14 +406,13 @@
 
     .input-control {
       width: 100%;
-      background: rgba(0, 0, 0, 0.45);
+      background: rgba(0, 0, 0, 0.5);
       border: 1px solid rgba(246, 195, 67, 0.35);
       border-radius: 12px;
       padding: 12px 14px;
       color: #fff;
       font-size: 14px;
       outline: none;
-      transition: 0.3s;
     }
 
     .input-control:focus {
@@ -425,7 +425,7 @@
       border-radius: 16px;
       padding: 20px;
       text-align: center;
-      background: rgba(0,0,0,0.25);
+      background: rgba(0,0,0,0.3);
       cursor: pointer;
     }
 
@@ -440,16 +440,14 @@
       padding: 15px;
       cursor: pointer;
       box-shadow: 0 8px 20px rgba(255, 140, 0, 0.4);
-      transition: 0.3s;
       margin-top: 10px;
     }
 
-    /* Modal for Cropping */
     #cropModal {
       position: fixed;
       inset: 0;
       background: rgba(0,0,0,0.92);
-      z-index: 100001;
+      z-index: 100005;
       display: none;
       align-items: center;
       justify-content: center;
@@ -474,7 +472,7 @@
 </head>
 <body>
 
-  <!-- Royal Curtain Opening -->
+  <!-- Royal Curtain Animation -->
   <div id="curtain-container">
     <div class="curtain curtain-left"></div>
     <div class="curtain curtain-right"></div>
@@ -514,7 +512,6 @@
       <div class="animated-border-card">
         <div class="card-inner">
           
-          <!-- Badi Animated Photo -->
           <div class="big-photo-wrapper">
             <img id="card-photo" src="https://images.unsplash.com/photo-1514565131-fce0801e5785?q=80&w=800&auto=format&fit=crop" alt="Diwali Photo">
           </div>
@@ -524,7 +521,7 @@
 
           <div class="greeting-quote-box">
             <p id="card-message">"आपको और आपके पूरे परिवार को दीपावली की हार्दिक शुभकामनाएं। यह पावन पर्व आपके जीवन में खुशियां और समृद्धि लाए!"</p>
-            <div class="voice-badge" onclick="playSpeech()">
+            <div class="voice-badge" id="btn-play-voice">
               <i class="fas fa-volume-up"></i> बोलकर सुनें
             </div>
           </div>
@@ -532,12 +529,12 @@
           <p style="font-size: 12px; color: #cbd5e1; margin-bottom: 5px;">आपकी तरफ से सस्नेह प्यार और हार्दिक शुभकामनाएं ❤️</p>
 
           <!-- WhatsApp Share Button -->
-          <a id="btn-wa-share" href="#" target="_blank" class="btn-wa-animated">
+          <div id="btn-wa-share" class="btn-wa-animated">
             <i class="fab fa-whatsapp"></i> WhatsApp पर शेयर करें
-          </a>
+          </div>
 
           <div>
-            <button class="btn-create-own" onclick="showCreateMode()">
+            <button id="btn-open-create" class="btn-create-own">
               🎁 आप भी अपना दिवाली विश बनाएं
             </button>
           </div>
@@ -554,10 +551,10 @@
 
           <div class="form-group">
             <label>1. अपनी फ़ोटो चुनें</label>
-            <div class="file-upload-box" onclick="document.getElementById('photo-input').click()">
+            <div class="file-upload-box" id="upload-trigger-box">
               <i class="fas fa-camera" style="font-size: 32px; color: var(--gold-primary); margin-bottom: 8px;"></i>
               <div id="upload-hint" style="font-size: 13px; color: #cbd5e1;">फ़ोटो अपलोड करने के लिए टैप करें</div>
-              <input type="file" id="photo-input" accept="image/*" style="display: none;" onchange="handleFileSelect(event)">
+              <input type="file" id="photo-input" accept="image/*" style="display: none;">
             </div>
           </div>
 
@@ -571,11 +568,11 @@
             <textarea id="user-msg-input" class="input-control" rows="3">आपको और आपके पूरे परिवार को दीपावली की हार्दिक शुभकामनाएं। आपका जीवन खुशियों और समृद्धि से भर जाए!</textarea>
           </div>
 
-          <button id="btn-generate" class="btn-submit-gold" onclick="submitWish()">
+          <button id="btn-generate" class="btn-submit-gold">
             ✨ दिवाली विश लिंक बनाएं
           </button>
 
-          <button class="btn-create-own" style="border:none; margin-top:8px;" onclick="cancelCreate()">
+          <button id="btn-cancel-create" class="btn-create-own" style="border:none; margin-top:8px;">
             रद्द करें
           </button>
         </div>
@@ -591,35 +588,119 @@
       <div class="crop-img-container">
         <img id="image-to-crop" style="max-width: 100%;">
       </div>
-      <button class="btn-submit-gold" onclick="cropImageDone()">क्रॉप पूरा करें</button>
+      <button id="btn-crop-finish" class="btn-submit-gold">क्रॉप पूरा करें</button>
     </div>
   </div>
 
-  <!-- External Libraries -->
+  <!-- Scripts -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.13/cropper.min.js"></script>
 
   <script>
-    // Supabase Configuration
     const SUPABASE_URL = "https://uaoveseiyzftqornhgpt.supabase.co";
     const SUPABASE_ANON_KEY = "sb_publishable_CkjwInj9XCsmhkRq3sdMlQ_2Fi6gMYh";
     const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
     let cropper = null;
     let croppedBlob = null;
-    let currentWishData = null;
+    let activeWishCode = null;
+    let activeUserName = "शुभचिंतक";
 
-    // Fast Page Initialization (Auto-start)
-    if (document.readyState === 'loading') {
-      document.addEventListener('DOMContentLoaded', initApp);
-    } else {
+    // Auto-remove curtain overlay completely from DOM after animation
+    setTimeout(() => {
+      const curtain = document.getElementById('curtain-container');
+      if (curtain) curtain.remove();
+    }, 2400);
+
+    document.addEventListener('DOMContentLoaded', () => {
       initApp();
+      bindEvents();
+    });
+
+    function bindEvents() {
+      // 1. Create Wish Toggle
+      document.getElementById('btn-open-create').addEventListener('click', () => {
+        document.getElementById('view-card-section').style.display = 'none';
+        document.getElementById('create-card-section').style.display = 'block';
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      });
+
+      document.getElementById('btn-cancel-create').addEventListener('click', () => {
+        document.getElementById('create-card-section').style.display = 'none';
+        document.getElementById('view-card-section').style.display = 'block';
+      });
+
+      // 2. WhatsApp Share Trigger
+      document.getElementById('btn-wa-share').addEventListener('click', () => {
+        const origin = window.location.origin;
+        let shareUrl = origin;
+        let name = "मेरी";
+
+        if (activeWishCode) {
+          shareUrl = `${origin}/wish/${activeWishCode}`;
+          name = activeUserName;
+        }
+
+        const text = `🪔 *शुभ दीपावली!* 🪔\n\n*${name}* की तरफ से आपके और आपके पूरे परिवार के लिए एक विशेष दीपावली शुभकामना संदेश भेजा गया है ❤️✨\n\n👇 नीचे दिए गए लिंक को खोलकर अपना खास ग्रीटिंग कार्ड देखें:\n${shareUrl}\n\n✨ *रोशनी का यह त्योहार आपके जीवन में अपार खुशियां और समृद्धि लेकर आए!* ✨`;
+        window.open(`https://api.whatsapp.com/send?text=${encodeURIComponent(text)}`, '_blank');
+      });
+
+      // 3. Voice Speech Trigger
+      document.getElementById('btn-play-voice').addEventListener('click', () => {
+        playSpeech();
+      });
+
+      // Screen tap par bhi voice auto-trigger ho sake
+      document.body.addEventListener('click', () => {
+        if (!window.hasSpoken) {
+          playSpeech();
+          window.hasSpoken = true;
+        }
+      }, { once: true });
+
+      // 4. File Upload & Crop Events
+      const fileInput = document.getElementById('photo-input');
+      document.getElementById('upload-trigger-box').addEventListener('click', () => {
+        fileInput.click();
+      });
+
+      fileInput.addEventListener('change', (e) => {
+        const file = e.target.files[0];
+        if (!file) return;
+
+        const reader = new FileReader();
+        reader.onload = (event) => {
+          const img = document.getElementById('image-to-crop');
+          img.src = event.target.result;
+          document.getElementById('cropModal').style.display = 'flex';
+
+          if (cropper) cropper.destroy();
+          cropper = new Cropper(img, {
+            aspectRatio: 1,
+            viewMode: 1,
+            autoCropArea: 0.9
+          });
+        };
+        reader.readAsDataURL(file);
+      });
+
+      document.getElementById('btn-crop-finish').addEventListener('click', () => {
+        if (!cropper) return;
+        const canvas = cropper.getCroppedCanvas({ width: 500, height: 500 });
+        canvas.toBlob((blob) => {
+          croppedBlob = blob;
+          document.getElementById('upload-hint').innerHTML = `<span style="color:#4ade80; font-weight:600;">✓ फ़ोटो चुन ली गई है!</span>`;
+          document.getElementById('cropModal').style.display = 'none';
+        }, 'image/jpeg', 0.85);
+      });
+
+      // 5. Submit Form
+      document.getElementById('btn-generate').addEventListener('click', submitWish);
     }
 
     async function initApp() {
       initFireworks();
 
-      // Check URL parameters for wish code
       const urlParams = new URLSearchParams(window.location.search);
       let wishCode = urlParams.get('w');
 
@@ -631,13 +712,11 @@
       }
 
       if (wishCode) {
+        activeWishCode = wishCode;
         await loadWishData(wishCode);
-      } else {
-        updateShareButton(null);
       }
     }
 
-    // Load Wish Data from Supabase
     async function loadWishData(code) {
       try {
         const { data, error } = await supabase
@@ -646,46 +725,20 @@
           .eq('wish_code', code)
           .single();
 
-        if (error || !data) {
-          console.warn("Wish not found, showing default");
-          return;
-        }
+        if (error || !data) return;
 
-        currentWishData = data;
+        activeUserName = data.user_name;
         document.getElementById('card-name').textContent = data.user_name;
         document.getElementById('card-message').textContent = `"${data.greeting_message}"`;
         if (data.photo_url) {
           document.getElementById('card-photo').src = data.photo_url;
         }
 
-        updateShareButton(data);
-        setTimeout(playSpeech, 1200);
-
       } catch (err) {
         console.error(err);
       }
     }
 
-    // WhatsApp Sharing Handler with Dynamic Preview Route
-    function updateShareButton(data) {
-      const btn = document.getElementById('btn-wa-share');
-      const origin = window.location.origin;
-
-      let shareUrl = origin;
-      let name = "मेरी";
-
-      if (data && data.wish_code) {
-        // Sends crawler to Vercel serverless preview function:
-        shareUrl = `${origin}/wish/${data.wish_code}`;
-        name = data.user_name;
-      }
-
-      const text = `🪔 *शुभ दीपावली!* 🪔\n\n*${name}* की तरफ से आपके और आपके पूरे परिवार के लिए एक विशेष दीपावली शुभकामना संदेश भेजा गया है ❤️✨\n\n👇 नीचे दिए गए लिंक को खोलकर अपना खास ग्रीटिंग कार्ड देखें:\n${shareUrl}\n\n✨ *रोशनी का यह त्योहार आपके जीवन में अपार खुशियां और समृद्धि लेकर आए!* ✨`;
-      
-      btn.href = `https://api.whatsapp.com/send?text=${encodeURIComponent(text)}`;
-    }
-
-    // Text to Speech
     function playSpeech() {
       if (!('speechSynthesis' in window)) return;
       window.speechSynthesis.cancel();
@@ -699,38 +752,6 @@
       window.speechSynthesis.speak(utterance);
     }
 
-    // Image Upload & Crop
-    function handleFileSelect(e) {
-      const file = e.target.files[0];
-      if (!file) return;
-
-      const reader = new FileReader();
-      reader.onload = (event) => {
-        const img = document.getElementById('image-to-crop');
-        img.src = event.target.result;
-        document.getElementById('cropModal').style.display = 'flex';
-
-        if (cropper) cropper.destroy();
-        cropper = new Cropper(img, {
-          aspectRatio: 1,
-          viewMode: 1,
-          autoCropArea: 0.9
-        });
-      };
-      reader.readAsDataURL(file);
-    }
-
-    function cropImageDone() {
-      if (!cropper) return;
-      const canvas = cropper.getCroppedCanvas({ width: 500, height: 500 });
-      canvas.toBlob((blob) => {
-        croppedBlob = blob;
-        document.getElementById('upload-hint').innerHTML = `<span style="color:#4ade80;">✓ फ़ोटो सफलतापूर्वक चुनी गई!</span>`;
-        document.getElementById('cropModal').style.display = 'none';
-      }, 'image/jpeg', 0.85);
-    }
-
-    // Submit & Create Wish
     async function submitWish() {
       const name = document.getElementById('user-name-input').value.trim();
       const message = document.getElementById('user-msg-input').value.trim();
@@ -748,7 +769,6 @@
         const wishCode = Math.random().toString(36).substring(2, 8);
         let photoUrl = "https://images.unsplash.com/photo-1514565131-fce0801e5785?q=80&w=800&auto=format&fit=crop";
 
-        // Upload to Supabase Storage if cropped
         if (croppedBlob) {
           const filePath = `${wishCode}_${Date.now()}.jpg`;
           const { error: uploadError } = await supabase.storage
@@ -763,7 +783,6 @@
           }
         }
 
-        // Insert Record in Supabase
         const { error: dbError } = await supabase
           .from('diwali_wishes')
           .insert([{
@@ -775,7 +794,6 @@
 
         if (dbError) throw dbError;
 
-        // Redirect to new wish
         window.location.href = `/?w=${wishCode}`;
 
       } catch (err) {
@@ -786,18 +804,6 @@
       }
     }
 
-    function showCreateMode() {
-      document.getElementById('view-card-section').style.display = 'none';
-      document.getElementById('create-card-section').style.display = 'block';
-      window.scrollTo({ top: 0, behavior: 'smooth' });
-    }
-
-    function cancelCreate() {
-      document.getElementById('create-card-section').style.display = 'none';
-      document.getElementById('view-card-section').style.display = 'block';
-    }
-
-    // Fireworks Canvas
     function initFireworks() {
       const canvas = document.getElementById('fireworks-canvas');
       if (!canvas) return;
